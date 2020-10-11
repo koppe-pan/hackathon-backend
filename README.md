@@ -1,7 +1,8 @@
 # Run on Docker
 
-1. `docker-compose build`
-2. `docker-compose up`
+
+### 1. `docker-compose build`
+### 2. `docker-compose up`
 
 # Backend
 
