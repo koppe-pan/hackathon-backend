@@ -6,7 +6,7 @@ defmodule BackendWeb.Router do
   end
 
   pipeline :api_auth do
-    plug(Backend.Guardian.AuthPipeline)
+    # plug(Backend.Guardian.AuthPipeline)
   end
 
   scope "/api/swagger" do
@@ -27,7 +27,7 @@ defmodule BackendWeb.Router do
 
     resources("/coupons", CouponController, except: [:new, :edit])
 
-    resources("/health_datas", HealthDataController, except: [:new, :edit])
+    # resources("/health_datas", HealthDataController, except: [:new, :edit])
     delete("/logout", SessionController, :logout)
   end
 

@@ -140,7 +140,12 @@ defmodule BackendWeb.UserController do
     summary("Delete User")
     description("Delete a user by ID")
     tag("Users")
-    parameter(:id, :path, :integer, "User ID", required: true, example: 3)
+
+    parameters do
+      company_id(:path, :integer, "Company ID", required: true, example: 3)
+      id(:path, :integer, "User ID", required: true, example: 3)
+    end
+
     response(203, "No Content - Deleted Successfully")
   end
 

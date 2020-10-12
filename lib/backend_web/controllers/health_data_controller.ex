@@ -5,14 +5,15 @@ defmodule BackendWeb.HealthDataController do
   alias Backend.HealthDatas
   alias Backend.HealthDatas.HealthData
 
-  action_fallback BackendWeb.FallbackController
+  action_fallback(BackendWeb.FallbackController)
 
   swagger_path :index do
-    get "/api/health_datas"
-    summary "List health_datas"
-    description "List all health_datas in the database"
-    tag "HealthDatas"
-    produces "application/json"
+    get("/api/users/{user_id}/health_datas")
+    summary("List health_datas")
+    description("List all health_datas in the database")
+    tag("HealthDatas")
+    produces("application/json")
+
     response(200, "OK", Schema.ref(:HealthDatasResponse),
       example: %{
         data: [
@@ -20,25 +21,25 @@ defmodule BackendWeb.HealthDataController do
             id: 1,
             comment: "some comment",
             date: ~D[2010-04-17],
-            step: 42,
+            step: 42
           }
         ]
       }
-      )
+    )
   end
 
-  def index(conn, _params) do
-    health_datas = HealthDatas.list_health_datas()
+  def index(conn, %{"user_id" => user_id}) do
+    health_datas = HealthDatas.list_health_datas!(user_id)
     render(conn, "index.json", health_datas: health_datas)
   end
 
   swagger_path :create do
-    post "/api/health_datas"
-    summary "Create health_data"
-    description "Creates a new health_data"
-    tag "HealthDatas"
-    consumes "application/json"
-    produces "application/json"
+    post("/api/health_datas")
+    summary("Create health_data")
+    description("Creates a new health_data")
+    tag("HealthDatas")
+    consumes("application/json")
+    produces("application/json")
 
     parameter(:health_data, :body, Schema.ref(:HealthDataRequest), "The health_data details",
       example: %{
@@ -52,7 +53,7 @@ defmodule BackendWeb.HealthDataController do
           id: 1,
           comment: "some comment",
           date: ~D[2010-04-17],
-          step: 42,
+          step: 42
         }
       }
     )
@@ -68,11 +69,11 @@ defmodule BackendWeb.HealthDataController do
   end
 
   swagger_path :show do
-    summary "Show HealthData"
-    description "Show a health_data by ID"
-    tag "HealthDatas"
-    produces "application/json"
-    parameter :id, :path, :integer, "HealthData ID", required: true, example: 123
+    summary("Show HealthData")
+    description("Show a health_data by ID")
+    tag("HealthDatas")
+    produces("application/json")
+    parameter(:id, :path, :integer, "HealthData ID", required: true, example: 123)
 
     response(200, "OK", Schema.ref(:HealthDataResponse),
       example: %{
@@ -80,7 +81,7 @@ defmodule BackendWeb.HealthDataController do
           id: 123,
           comment: "some comment",
           date: ~D[2010-04-17],
-          step: 42,
+          step: 42
         }
       }
     )
@@ -92,12 +93,12 @@ defmodule BackendWeb.HealthDataController do
   end
 
   swagger_path :update do
-    put "/api/health_datas/{id}"
-    summary "Update health_data"
-    description "Update all attributes of a health_data"
-    tag "HealthDatas"
-    consumes "application/json"
-    produces "application/json"
+    put("/api/health_datas/{id}")
+    summary("Update health_data")
+    description("Update all attributes of a health_data")
+    tag("HealthDatas")
+    consumes("application/json")
+    produces("application/json")
 
     parameters do
       id(:path, :integer, "HealthData ID", required: true, example: 3)
@@ -115,7 +116,7 @@ defmodule BackendWeb.HealthDataController do
           id: 3,
           comment: "some comment",
           date: ~D[2010-04-17],
-          step: 42,
+          step: 42
         }
       }
     )
@@ -124,18 +125,19 @@ defmodule BackendWeb.HealthDataController do
   def update(conn, %{"id" => id, "health_data" => health_data_params}) do
     health_data = HealthDatas.get_health_data!(id)
 
-    with {:ok, %HealthData{} = health_data} <- HealthDatas.update_health_data(health_data, health_data_params) do
+    with {:ok, %HealthData{} = health_data} <-
+           HealthDatas.update_health_data(health_data, health_data_params) do
       render(conn, "show.json", health_data: health_data)
     end
   end
 
-  swagger_path :delete  do
-    PhoenixSwagger.Path.delete "/api/health_datas/{id}"
-    summary "Delete HealthData"
-    description "Delete a health_data by ID"
-    tag "HealthDatas"
-    parameter :id, :path, :integer, "HealthData ID", required: true, example: 3
-    response 203, "No Content - Deleted Successfully"
+  swagger_path :delete do
+    PhoenixSwagger.Path.delete("/api/health_datas/{id}")
+    summary("Delete HealthData")
+    description("Delete a health_data by ID")
+    tag("HealthDatas")
+    parameter(:id, :path, :integer, "HealthData ID", required: true, example: 3)
+    response(203, "No Content - Deleted Successfully")
   end
 
   def delete(conn, %{"id" => id}) do
@@ -148,46 +150,51 @@ defmodule BackendWeb.HealthDataController do
 
   def swagger_definitions do
     %{
-      HealthData: swagger_schema do
-        title "HealthData"
-        description "A health_data of the app"
+      HealthData:
+        swagger_schema do
+          title("HealthData")
+          description("A health_data of the app")
 
-        properties do
-          id :integer, "HealthData ID"
-          comment :string, "HealthData comment"
-          date :string, "HealthData date"
-          step :string, "HealthData step"
-        end
+          properties do
+            id(:integer, "HealthData ID")
+            comment(:string, "HealthData comment")
+            date(:string, "HealthData date")
+            step(:string, "HealthData step")
+          end
 
-        example(%{
-          id: 123,
-          comment: "some comment",
-          date: ~D[2010-04-17],
-          step: 42,
-        })
-    end,
-    HealthDataRequest: swagger_schema do
-      title "HealthDataRequest"
-      description "POST body for creating a health_data"
-      property :health_data, Schema.ref(:HealthData), "The health_data details"
-      example(%{
-        health_data: %{
+          example(%{
+            id: 123,
             comment: "some comment",
             date: ~D[2010-04-17],
-            step: 42,
-        }
-      })
-    end,
-    HealthDataResponse: swagger_schema do
-      title "HealthDataResponse"
-      description "Response schema for single health_data"
-      property :data, Schema.ref(:HealthData), "The health_data details"
-    end,
-    HealthDatasResponse: swagger_schema do
-      title "HealthDatasReponse"
-      description "Response schema for multiple health_datas"
-      property :data, Schema.array(:HealthData), "The health_datas details"
-    end
+            step: 42
+          })
+        end,
+      HealthDataRequest:
+        swagger_schema do
+          title("HealthDataRequest")
+          description("POST body for creating a health_data")
+          property(:health_data, Schema.ref(:HealthData), "The health_data details")
+
+          example(%{
+            health_data: %{
+              comment: "some comment",
+              date: ~D[2010-04-17],
+              step: 42
+            }
+          })
+        end,
+      HealthDataResponse:
+        swagger_schema do
+          title("HealthDataResponse")
+          description("Response schema for single health_data")
+          property(:data, Schema.ref(:HealthData), "The health_data details")
+        end,
+      HealthDatasResponse:
+        swagger_schema do
+          title("HealthDatasReponse")
+          description("Response schema for multiple health_datas")
+          property(:data, Schema.array(:HealthData), "The health_datas details")
+        end
     }
   end
 end

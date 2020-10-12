@@ -7,6 +7,7 @@ defmodule Backend.HealthDatas do
   alias Backend.Repo
 
   alias Backend.HealthDatas.HealthData
+  alias Backend.Users
 
   @doc """
   Returns the list of health_datas.
@@ -19,6 +20,12 @@ defmodule Backend.HealthDatas do
   """
   def list_health_datas do
     Repo.all(HealthData)
+  end
+
+  def list_health_datas!(user_id) do
+    Users.get_user(user_id)
+    |> Repo.preload(:health_datas)
+    |> Map.get(:health_datas)
   end
 
   @doc """
@@ -36,6 +43,12 @@ defmodule Backend.HealthDatas do
 
   """
   def get_health_data!(id), do: Repo.get!(HealthData, id)
+
+  def get_health_data_after_date!(user_id, date) do
+    Users.get_user!(user_id)
+    |> Repo.preload(:health_datas)
+    |> Map.get(:health_datas)
+  end
 
   @doc """
   Creates a health_data.
