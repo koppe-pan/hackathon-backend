@@ -43,6 +43,17 @@ defmodule Backend.Users do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
+  def get_user_by_slack(slack_user_id), do: Repo.get_by(User, slack_user_id: slack_user_id)
+
+  def get_or_create_user!(slack_company_id, slack_user_id, user_name) do
+    case get_user_by_slack(slack_user_id) do
+      {:ok, user = %User{}} ->
+        {:ok, user}
+
+      {:error, _reason} ->
+        create_user_by_slack!(slack_company_id, %{slack_user_id: slack_user_id, name: user_name})
+    end
+  end
 
   @doc """
   Creates a user.
@@ -58,6 +69,19 @@ defmodule Backend.Users do
   """
   def create_user!(company_id, attrs \\ %{}) do
     Companies.get_company!(company_id)
+    |> Ecto.build_assoc(:users)
+    |> User.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def create_user_by_slack!(slack_company_id, attrs \\ %{}) do
+    case Companies.get_company_by_slack(slack_company_id) do
+      {:ok, company} ->
+        company
+
+      {:error, _reason} ->
+        Companies.create_company(%{slack_company_id: slack_company_id})
+    end
     |> Ecto.build_assoc(:users)
     |> User.changeset(attrs)
     |> Repo.insert()
@@ -110,7 +134,37 @@ defmodule Backend.Users do
     User.changeset(user, attrs)
   end
 
-  def authenticate_user(_token) do
-    {:ok, Repo.get(User, 1)}
+  def authenticate_user(token) do
+    HTTPoison.start()
+
+    case HTTPoison.post(
+           "https://slack.com/api/auth.test",
+           "{\"body\": \"token\": {\"#{token}\"}}",
+           [{"Content-Type", "application/json"}]
+         ) do
+      {:ok,
+       %HTTPoison.Response{
+         status_code: 200,
+         body: body
+       }} ->
+        case Jason.decode!(body) do
+          %{
+            "ok" => true,
+            "team_id" => slack_company_id,
+            "user" => user_name,
+            "user_id" => slack_user_id
+          } ->
+            get_or_create_user!(slack_company_id, slack_user_id, user_name)
+
+          %{"ok" => false} ->
+            {:error, "200"}
+        end
+
+      {:ok, %HTTPoison.Response{status_code: 404}} ->
+        {:error, "404"}
+
+      {:error, %HTTPoison.Error{reason: reason}} ->
+        {:error, reason}
+    end
   end
 end

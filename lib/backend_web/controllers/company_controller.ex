@@ -5,7 +5,7 @@ defmodule BackendWeb.CompanyController do
   alias Backend.Companies
   alias Backend.Companies.Company
 
-  action_fallback BackendWeb.FallbackController
+  action_fallback(BackendWeb.FallbackController)
 
   swagger_path :index do
     get("/api/companies")
@@ -30,6 +30,7 @@ defmodule BackendWeb.CompanyController do
     render(conn, "index.json", companies: companies)
   end
 
+  @doc """
   swagger_path :create do
     post("/api/companies")
     summary("Create company")
@@ -117,6 +118,7 @@ defmodule BackendWeb.CompanyController do
       render(conn, "show.json", company: company)
     end
   end
+  """
 
   swagger_path :delete do
     PhoenixSwagger.Path.delete("/api/companies/{id}")

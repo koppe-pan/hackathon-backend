@@ -3,14 +3,16 @@ defmodule Backend.Companies.Company do
   import Ecto.Changeset
 
   schema "companies" do
-    has_many :users, Backend.Users.User
+    field(:slack_company_id, :string, unique: true)
+    has_many(:users, Backend.Users.User)
+
     timestamps()
   end
 
   @doc false
   def changeset(company, attrs) do
     company
-    |> cast(attrs, [])
-    |> validate_required([])
+    |> cast(attrs, [:slack_company_id])
+    |> validate_required([:slack_company_id])
   end
 end

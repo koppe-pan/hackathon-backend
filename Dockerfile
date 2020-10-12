@@ -15,6 +15,6 @@ WORKDIR /app
 
 
 # Compile the project
-RUN mix do compile
+RUN  mix deps.get && mix compile
 
 CMD ["/app/entrypoint.sh"]

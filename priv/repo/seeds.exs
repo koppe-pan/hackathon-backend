@@ -10,46 +10,52 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 Backend.Repo.insert!(%Backend.Companies.Company{
-  id: 1
+  slack_company_id: "sample_company_id"
 })
 
 Backend.Repo.insert!(%Backend.Companies.Company{
-  id: 2
+  slack_company_id: "sample_company_id_2"
 })
+
 Backend.Repo.insert!(%Backend.Users.User{
   company_id: 1,
   name: "sample_user",
-  role: "president"
+  slack_user_id: "sample_id"
 })
 
 Backend.Repo.insert!(%Backend.Users.User{
   company_id: 1,
   name: "sample_user_2",
-  role: "director"
+  slack_user_id: "sample_id_2"
 })
 
 Backend.Repo.insert!(%Backend.Users.User{
   company_id: 2,
   name: "sample_user_3",
-  role: "president"
+  slack_user_id: "sample_id_3"
 })
+
 Backend.Repo.insert!(%Backend.HealthDatas.HealthData{
   comment: "health data for sample_user",
+  date: ~D[2000-01-01],
   step: 10,
   user_id: 1
 })
+
 Backend.Repo.insert!(%Backend.HealthDatas.HealthData{
   comment: "health data for sample_user_2",
   date: ~D[2000-01-01],
   step: 5,
   user_id: 2
 })
+
 Backend.Repo.insert!(%Backend.HealthDatas.HealthData{
   comment: "health data for sample_user_3",
   date: ~D[2000-01-01],
   step: 100,
   user_id: 3
 })
+
 Backend.Repo.insert!(%Backend.Coupons.Coupon{
   cost: 1000,
   description: "sample coupon",

@@ -5,7 +5,7 @@ defmodule BackendWeb.SessionController do
   alias Backend.Users
   alias Backend.Guardian
 
-  action_fallback BackendWeb.FallbackController
+  action_fallback(BackendWeb.FallbackController)
 
   swagger_path :login do
     post("/api/login")
@@ -17,11 +17,7 @@ defmodule BackendWeb.SessionController do
 
     tag("Sessions")
 
-    parameter(:token, :body, "some slack token", "The slack token",
-      example: %{
-        token: "some slack token"
-      }
-    )
+    parameter(:token, :body, :string, "Slack Token", required: true, example: "some_token")
 
     response(
       200,
@@ -47,10 +43,10 @@ defmodule BackendWeb.SessionController do
         conn
         |> render("login.json", user: user, jwt: jwt)
 
-      {:error, _changeset} ->
+      {:error, reason} ->
         conn
         |> put_status(401)
-        |> render("error.json", message: "Could not login")
+        |> render("401.json", message: reason)
     end
   end
 

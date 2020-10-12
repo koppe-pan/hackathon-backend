@@ -45,7 +45,8 @@ defmodule Backend.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_swagger, "~> 0.8"},
       {:ex_json_schema, "~> 0.5"},
-      {:guardian, "~> 2.0"}
+      {:guardian, "~> 2.0"},
+      {:httpoison, "~> 1.6"}
     ]
   end
 

@@ -5,7 +5,7 @@ defmodule BackendWeb.UserController do
   alias Backend.Users
   alias Backend.Users.User
 
-  action_fallback BackendWeb.FallbackController
+  action_fallback(BackendWeb.FallbackController)
 
   swagger_path :index do
     get("/api/companies/{company_id}/users")
@@ -13,6 +13,7 @@ defmodule BackendWeb.UserController do
     description("List all users in the database")
     tag("Users")
     produces("application/json")
+    parameter(:company_id, :path, :integer, "Company ID", required: true, example: 3)
 
     response(200, "OK", Schema.ref(:UsersResponse),
       example: %{
@@ -33,6 +34,7 @@ defmodule BackendWeb.UserController do
     render(conn, "index.json", users: users)
   end
 
+  @doc """
   swagger_path :create do
     post("/api/companies/{company_id}/users")
     summary("Create user")
@@ -67,12 +69,14 @@ defmodule BackendWeb.UserController do
       |> render("show.json", user: user)
     end
   end
+  """
 
   swagger_path :show do
     summary("Show User")
     description("Show a user by ID")
     tag("Users")
     produces("application/json")
+    parameter(:company_id, :path, :integer, "Company ID", required: true, example: 3)
     parameter(:id, :path, :integer, "User ID", required: true, example: 123)
 
     response(200, "OK", Schema.ref(:UserResponse),
@@ -101,6 +105,7 @@ defmodule BackendWeb.UserController do
     produces("application/json")
 
     parameters do
+      company_id(:path, :integer, "Company ID", required: true, example: 3)
       id(:path, :integer, "User ID", required: true, example: 3)
 
       user(:body, Schema.ref(:UserRequest), "The user details",
@@ -155,6 +160,7 @@ defmodule BackendWeb.UserController do
           description("A user of the app")
 
           properties do
+            company_id(:integer, "Company ID")
             id(:integer, "User ID")
             name(:string, "User name")
             point(:string, "User point")
