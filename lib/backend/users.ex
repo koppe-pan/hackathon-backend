@@ -167,4 +167,9 @@ defmodule Backend.Users do
         {:error, reason}
     end
   end
+
+  def reset_point do
+    list_users()
+    |> Enum.each(fn user -> update_user(user, %{point: 0}) end)
+  end
 end
