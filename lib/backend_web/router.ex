@@ -27,7 +27,10 @@ defmodule BackendWeb.Router do
 
     resources("/coupons", CouponController, except: [:new, :edit])
 
-    # resources("/health_datas", HealthDataController, except: [:new, :edit])
+    resources "/users", UserController, only: [] do
+      resources("/health_datas", HealthDataController, except: [:new, :edit])
+    end
+
     delete("/logout", SessionController, :logout)
   end
 

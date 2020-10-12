@@ -63,10 +63,11 @@ defmodule BackendWeb.HealthDataController do
   end
 
   def create(conn, %{"user_id" => user_id, "health_data" => health_data_params}) do
-    with {:ok, %HealthData{} = health_data} <- HealthDatas.create_health_data(health_data_params) do
+    with {:ok, %HealthData{} = health_data} <-
+           HealthDatas.create_health_data!(user_id, health_data_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.health_data_path(conn, :show, health_data))
+      |> put_resp_header("location", Routes.user_health_data_path(conn, :show, health_data))
       |> render("show.json", health_data: health_data)
     end
   end
@@ -76,6 +77,7 @@ defmodule BackendWeb.HealthDataController do
     description("Show a health_data by ID")
     tag("HealthDatas")
     produces("application/json")
+    parameter(:user_id, :path, :integer, "User ID", required: true, example: 3)
     parameter(:id, :path, :integer, "HealthData ID", required: true, example: 123)
 
     response(200, "OK", Schema.ref(:HealthDataResponse),
@@ -96,12 +98,14 @@ defmodule BackendWeb.HealthDataController do
   end
 
   swagger_path :update do
-    put("/api/health_datas/{id}")
+    put("/api/users/{user_id}/health_datas/{id}")
     summary("Update health_data")
     description("Update all attributes of a health_data")
     tag("HealthDatas")
     consumes("application/json")
     produces("application/json")
+
+    parameter(:user_id, :path, :integer, "User ID", required: true, example: 3)
 
     parameters do
       id(:path, :integer, "HealthData ID", required: true, example: 3)
@@ -135,10 +139,11 @@ defmodule BackendWeb.HealthDataController do
   end
 
   swagger_path :delete do
-    PhoenixSwagger.Path.delete("/api/health_datas/{id}")
+    PhoenixSwagger.Path.delete("/api/users/{user_id}/health_datas/{id}")
     summary("Delete HealthData")
     description("Delete a health_data by ID")
     tag("HealthDatas")
+    parameter(:user_id, :path, :integer, "User ID", required: true, example: 3)
     parameter(:id, :path, :integer, "HealthData ID", required: true, example: 3)
     response(203, "No Content - Deleted Successfully")
   end

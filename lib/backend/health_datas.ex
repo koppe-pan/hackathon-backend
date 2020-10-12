@@ -23,15 +23,14 @@ defmodule Backend.HealthDatas do
   end
 
   def list_health_datas!(user_id) do
-    Users.get_user(user_id)
+    Users.get_user!(user_id)
     |> Repo.preload(:health_datas)
     |> Map.get(:health_datas)
   end
 
   def list_health_datas_by_company!(company_id) do
-    Users.get_user(user_id)
-    |> Repo.preload(:health_datas)
-    |> Map.get(:health_datas)
+    Users.list_users!(company_id)
+    |> Enum.flat_map(fn user -> list_health_datas!(user.id) end)
   end
 
   @doc """
@@ -68,8 +67,9 @@ defmodule Backend.HealthDatas do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_health_data(attrs \\ %{}) do
-    %HealthData{}
+  def create_health_data!(user_id, attrs \\ %{}) do
+    Users.get_user!(user_id)
+    |> Ecto.build_assoc(:health_datas)
     |> HealthData.changeset(attrs)
     |> Repo.insert()
   end

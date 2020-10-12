@@ -3,10 +3,10 @@ defmodule Backend.HealthDatas.HealthData do
   import Ecto.Changeset
 
   schema "health_datas" do
-    field :comment, :string
-    field :date, :date
-    field :step, :integer
-    belongs_to :user, Backend.Users.User
+    field(:comment, :string)
+    field(:date, :date, unique: true)
+    field(:step, :integer)
+    belongs_to(:user, Backend.Users.User)
 
     timestamps()
   end
