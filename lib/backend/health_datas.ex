@@ -28,6 +28,12 @@ defmodule Backend.HealthDatas do
     |> Map.get(:health_datas)
   end
 
+  def list_health_datas_by_company!(company_id) do
+    Users.get_user(user_id)
+    |> Repo.preload(:health_datas)
+    |> Map.get(:health_datas)
+  end
+
   @doc """
   Gets a single health_data.
 
