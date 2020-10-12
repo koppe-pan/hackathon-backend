@@ -13,6 +13,7 @@ defmodule BackendWeb.HealthDataController do
     description("List all health_datas in the database")
     tag("HealthDatas")
     produces("application/json")
+    parameter(:user_id, :path, :integer, "User ID", required: true, example: 3)
 
     response(200, "OK", Schema.ref(:HealthDatasResponse),
       example: %{
@@ -34,12 +35,14 @@ defmodule BackendWeb.HealthDataController do
   end
 
   swagger_path :create do
-    post("/api/health_datas")
+    post("/api/users/{user_id}/health_datas")
     summary("Create health_data")
     description("Creates a new health_data")
     tag("HealthDatas")
     consumes("application/json")
     produces("application/json")
+
+    parameter(:user_id, :path, :integer, "User ID", required: true, example: 3)
 
     parameter(:health_data, :body, Schema.ref(:HealthDataRequest), "The health_data details",
       example: %{
@@ -59,7 +62,7 @@ defmodule BackendWeb.HealthDataController do
     )
   end
 
-  def create(conn, %{"health_data" => health_data_params}) do
+  def create(conn, %{"user_id" => user_id, "health_data" => health_data_params}) do
     with {:ok, %HealthData{} = health_data} <- HealthDatas.create_health_data(health_data_params) do
       conn
       |> put_status(:created)

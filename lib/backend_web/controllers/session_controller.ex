@@ -17,16 +17,13 @@ defmodule BackendWeb.SessionController do
 
     tag("Sessions")
 
-    parameter(:token, :body, :string, "Slack Token", required: true, example: "some_token")
+    parameter(:company, :body, Schema.ref(:SessionRequest), "The slack token",
+      example: %{
+        token: "some_slack_token"
+      }
+    )
 
-    response(
-      200,
-      "OK",
-      swagger_schema do
-        properties do
-          token(:string, "jwt token")
-        end
-      end,
+    response(200, "OK", Schema.ref(:SessionResponse),
       example: %{
         data: %{
           token: "some jwt token"
@@ -72,6 +69,30 @@ defmodule BackendWeb.SessionController do
         swagger_schema do
           title("Session")
           description("A session of the app")
+
+          properties do
+            token(:string, "JWT token")
+          end
+
+          example(%{
+            token: "some_JWT_token"
+          })
+        end,
+      SessionRequest:
+        swagger_schema do
+          title("SessionRequest")
+          description("POST body for logging in")
+          property(:company, Schema.ref(:Session), "The slack token")
+
+          example(%{
+            token: "some_slack_token"
+          })
+        end,
+      SessionResponse:
+        swagger_schema do
+          title("SessionResponse")
+          description("Response schema for session")
+          property(:data, Schema.ref(:Session), "The session details")
         end
     }
   end
