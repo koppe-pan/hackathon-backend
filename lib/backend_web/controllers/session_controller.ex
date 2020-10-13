@@ -47,6 +47,21 @@ defmodule BackendWeb.SessionController do
     end
   end
 
+  def callback(conn, %{"code" => code}) do
+    case Users.authenticate_user(code) do
+      {:ok, user} ->
+        {:ok, jwt, _claims} = Guardian.encode_and_sign(user)
+
+        conn
+        |> render("login.json", user: user, jwt: jwt)
+
+      {:error, reason} ->
+        conn
+        |> put_status(401)
+        |> render("401.json", message: reason)
+    end
+  end
+
   swagger_path :logout do
     PhoenixSwagger.Path.delete("/api/logout")
     summary("logout")
