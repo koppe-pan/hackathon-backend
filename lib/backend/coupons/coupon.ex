@@ -6,7 +6,6 @@ defmodule Backend.Coupons.Coupon do
     field(:cost, :integer)
     field(:description, :string)
     field(:life_time, :naive_datetime)
-    has_many(:companies, Backend.Companies.Company)
     timestamps()
   end
 

@@ -169,12 +169,15 @@ defmodule Backend.Users do
   defp get_token_by_code!(code) do
     HTTPoison.start()
 
+    params = [
+      code: code,
+      client_id: Application.get_env(:backend, :slack_id),
+      client_secret: Application.get_env(:backend, :slack_secret)
+    ]
+
     case HTTPoison.post(
            "https://slack.com/api/oauth.v2.access",
-           "{\"body\": {\"code\": \"#{code}\", \"client_id\": \"#{
-             Application.get_env(:backend, :slack_id)
-           }\", \"client_secret\": \"#{Application.get_env(:backend, :slack_secret)}\"}}",
-           [{"Content-Type", "application/x-www-form-urlencoded"}]
+           {:form, params}
          ) do
       {:ok,
        %HTTPoison.Response{
