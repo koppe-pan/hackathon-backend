@@ -3,9 +3,10 @@ defmodule Backend.Coupons.Coupon do
   import Ecto.Changeset
 
   schema "coupons" do
-    field :cost, :integer
-    field :description, :string
-    field :life_time, :naive_datetime
+    field(:cost, :integer)
+    field(:description, :string)
+    field(:life_time, :naive_datetime)
+    has_many(:companies, Backend.Companies.Company)
     timestamps()
   end
 

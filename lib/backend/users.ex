@@ -153,8 +153,8 @@ defmodule Backend.Users do
             } ->
               get_or_create_user!(slack_company_id, slack_user_id, user_name)
 
-            %{"ok" => false} ->
-              {:error, "200 in token"}
+            %{"ok" => false, "error" => error} ->
+              {:error, error}
           end
 
         {:ok, %HTTPoison.Response{status_code: 404}} ->
@@ -191,8 +191,8 @@ defmodule Backend.Users do
                    Backend.Companies.ensure_company_exist!(slack_company_id, token),
                  do: {:ok, token}
 
-          %{"ok" => false} ->
-            {:error, "200 in code"}
+          %{"ok" => false, "error" => error} ->
+            {:error, error}
         end
 
       {:ok, %HTTPoison.Response{status_code: 404}} ->
