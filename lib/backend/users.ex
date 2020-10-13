@@ -182,12 +182,11 @@ defmodule Backend.Users do
         case Jason.decode!(body) do
           %{
             "ok" => true,
-            "access_token" => token,
             "team" => %{"id" => slack_company_id},
-            "authed_user" => %{"access_token" => company_token}
+            "authed_user" => %{"access_token" => token}
           } ->
             with {:ok, _} <-
-                   Backend.Companies.ensure_company_exist!(slack_company_id, company_token),
+                   Backend.Companies.ensure_company_exist!(slack_company_id, token),
                  do: {:ok, token}
 
           %{"ok" => false} ->
