@@ -10,11 +10,13 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 Backend.Repo.insert!(%Backend.Companies.Company{
-  slack_company_id: "sample_company_id"
+  slack_company_id: "sample_company_id",
+  token: "some_token"
 })
 
 Backend.Repo.insert!(%Backend.Companies.Company{
-  slack_company_id: "sample_company_id_2"
+  slack_company_id: "sample_company_id_2",
+  token: "some_token_2"
 })
 
 Backend.Repo.insert!(%Backend.Users.User{

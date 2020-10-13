@@ -4,6 +4,7 @@ defmodule Backend.Companies.Company do
 
   schema "companies" do
     field(:slack_company_id, :string, unique: true)
+    field(:token, :string)
     has_many(:users, Backend.Users.User)
 
     timestamps()
@@ -12,7 +13,7 @@ defmodule Backend.Companies.Company do
   @doc false
   def changeset(company, attrs) do
     company
-    |> cast(attrs, [:slack_company_id])
-    |> validate_required([:slack_company_id])
+    |> cast(attrs, [:slack_company_id, :token])
+    |> validate_required([:slack_company_id, :token])
   end
 end

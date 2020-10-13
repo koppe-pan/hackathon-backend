@@ -4,6 +4,7 @@ defmodule Backend.Repo.Migrations.CreateUsers do
   def change do
     create table(:companies) do
       add(:slack_company_id, :string)
+      add(:token, :string)
       timestamps()
     end
 

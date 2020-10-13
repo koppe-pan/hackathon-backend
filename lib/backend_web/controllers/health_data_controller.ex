@@ -10,7 +10,7 @@ defmodule BackendWeb.HealthDataController do
   swagger_path :index do
     get("/api/users/{user_id}/health_datas")
     summary("List health_datas")
-    description("List all health_datas in the database")
+    description("List all health_datas in the user")
     tag("HealthDatas")
     produces("application/json")
     parameter(:user_id, :path, :integer, "User ID", required: true, example: 3)
@@ -31,6 +31,33 @@ defmodule BackendWeb.HealthDataController do
 
   def index(conn, %{"user_id" => user_id}) do
     health_datas = HealthDatas.list_health_datas!(user_id)
+    render(conn, "index.json", health_datas: health_datas)
+  end
+
+  swagger_path :index_by_company do
+    get("/api/companies/{company_id}/health_datas")
+    summary("List health_datas")
+    description("List all health_datas in the company")
+    tag("HealthDatas")
+    produces("application/json")
+    parameter(:company_id, :path, :integer, "User ID", required: true, example: 3)
+
+    response(200, "OK", Schema.ref(:HealthDatasResponse),
+      example: %{
+        data: [
+          %{
+            id: 1,
+            comment: "some comment",
+            date: ~D[2010-04-17],
+            step: 42
+          }
+        ]
+      }
+    )
+  end
+
+  def index_by_company(conn, %{"company_id" => company_id}) do
+    health_datas = HealthDatas.list_health_datas_by_company!(company_id)
     render(conn, "index.json", health_datas: health_datas)
   end
 

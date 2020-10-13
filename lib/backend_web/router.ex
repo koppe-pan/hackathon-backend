@@ -31,6 +31,8 @@ defmodule BackendWeb.Router do
       resources("/health_datas", HealthDataController, except: [:new, :edit])
     end
 
+    get("/companies/:company_id/health_datas", HealthDataController, :index_by_company)
+
     delete("/logout", SessionController, :logout)
   end
 

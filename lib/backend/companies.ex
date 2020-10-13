@@ -104,4 +104,14 @@ defmodule Backend.Companies do
   def change_company(%Company{} = company, attrs \\ %{}) do
     Company.changeset(company, attrs)
   end
+
+  def ensure_company_exist!(slack_company_id, company_token) do
+    case get_company_by_slack(slack_company_id) do
+      {:ok, company} ->
+        {:ok, company}
+
+      {:error, _} ->
+        create_company(%{slack_company_id: slack_company_id, token: company_token})
+    end
+  end
 end

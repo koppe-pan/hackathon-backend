@@ -49,12 +49,6 @@ defmodule Backend.HealthDatas do
   """
   def get_health_data!(id), do: Repo.get!(HealthData, id)
 
-  def get_health_data_after_date!(user_id, date) do
-    Users.get_user!(user_id)
-    |> Repo.preload(:health_datas)
-    |> Map.get(:health_datas)
-  end
-
   @doc """
   Creates a health_data.
 

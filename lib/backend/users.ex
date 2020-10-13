@@ -75,16 +75,12 @@ defmodule Backend.Users do
   end
 
   def create_user_by_slack!(slack_company_id, attrs \\ %{}) do
-    case Companies.get_company_by_slack(slack_company_id) do
-      {:ok, company} ->
-        company
-
-      {:error, _reason} ->
-        Companies.create_company(%{slack_company_id: slack_company_id})
+    with {:ok, company} <- Companies.get_company_by_slack(slack_company_id) do
+      company
+      |> Ecto.build_assoc(:users)
+      |> User.changeset(attrs)
+      |> Repo.insert()
     end
-    |> Ecto.build_assoc(:users)
-    |> User.changeset(attrs)
-    |> Repo.insert()
   end
 
   @doc """
@@ -134,13 +130,49 @@ defmodule Backend.Users do
     User.changeset(user, attrs)
   end
 
-  def authenticate_user(token) do
+  def authenticate_user(code) do
+    with {:ok, token} <- get_token_by_code!(code) do
+      HTTPoison.start()
+
+      case HTTPoison.post(
+             "https://slack.com/api/auth.test",
+             "{\"body\": \"token\": {\"#{token}\"}}",
+             [{"Content-Type", "application/json"}]
+           ) do
+        {:ok,
+         %HTTPoison.Response{
+           status_code: 200,
+           body: body
+         }} ->
+          case Jason.decode!(body) do
+            %{
+              "ok" => true,
+              "team_id" => slack_company_id,
+              "user" => user_name,
+              "user_id" => slack_user_id
+            } ->
+              get_or_create_user!(slack_company_id, slack_user_id, user_name)
+
+            %{"ok" => false} ->
+              {:error, "200"}
+          end
+
+        {:ok, %HTTPoison.Response{status_code: 404}} ->
+          {:error, "404"}
+
+        {:error, %HTTPoison.Error{reason: reason}} ->
+          {:error, reason}
+      end
+    end
+  end
+
+  defp get_token_by_code!(code) do
     HTTPoison.start()
 
     case HTTPoison.post(
-           "https://slack.com/api/auth.test",
-           "{\"body\": \"token\": {\"#{token}\"}}",
-           [{"Content-Type", "application/json"}]
+           "https://slack.com/api/oauth.v2.access",
+           "{\"body\": \"code\": {\"#{code}\"}}",
+           [{"Content-Type", "application/x-www-form-urlencoded"}]
          ) do
       {:ok,
        %HTTPoison.Response{
@@ -150,11 +182,13 @@ defmodule Backend.Users do
         case Jason.decode!(body) do
           %{
             "ok" => true,
-            "team_id" => slack_company_id,
-            "user" => user_name,
-            "user_id" => slack_user_id
+            "access_token" => token,
+            "team" => %{"id" => slack_company_id},
+            "authed_user" => %{"access_token" => company_token}
           } ->
-            get_or_create_user!(slack_company_id, slack_user_id, user_name)
+            with {:ok, _} <-
+                   Backend.Companies.ensure_company_exist!(slack_company_id, company_token),
+                 do: {:ok, token}
 
           %{"ok" => false} ->
             {:error, "200"}

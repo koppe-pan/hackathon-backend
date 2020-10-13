@@ -1,7 +1,7 @@
 defmodule Backend.Scheduler do
   use GenServer
 
-  def start_link(state) do
+  def start_link(_state) do
     GenServer.start_link(__MODULE__, %{})
   end
 
