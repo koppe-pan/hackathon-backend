@@ -37,8 +37,8 @@ defmodule Backend.Companies do
   """
   def get_company!(id), do: Repo.get!(Company, id)
 
-  def get_company_by_slack(slack_company_id),
-    do: Repo.get_by(Company, slack_company_id: slack_company_id)
+  def get_company_by_slack!(slack_company_id),
+    do: Repo.get_by!(Company, slack_company_id: slack_company_id)
 
   @doc """
   Creates a company.
@@ -106,7 +106,7 @@ defmodule Backend.Companies do
   end
 
   def ensure_company_exist!(slack_company_id, company_token) do
-    case get_company_by_slack(slack_company_id) do
+    case get_company_by_slack!(slack_company_id) do
       {:ok, company} ->
         {:ok, company}
 
