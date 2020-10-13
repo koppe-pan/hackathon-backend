@@ -154,11 +154,11 @@ defmodule Backend.Users do
               get_or_create_user!(slack_company_id, slack_user_id, user_name)
 
             %{"ok" => false} ->
-              {:error, "200"}
+              {:error, "200 in token"}
           end
 
         {:ok, %HTTPoison.Response{status_code: 404}} ->
-          {:error, "404"}
+          {:error, "404 in token"}
 
         {:error, %HTTPoison.Error{reason: reason}} ->
           {:error, reason}
@@ -190,11 +190,11 @@ defmodule Backend.Users do
                  do: {:ok, token}
 
           %{"ok" => false} ->
-            {:error, "200"}
+            {:error, "200 in code"}
         end
 
       {:ok, %HTTPoison.Response{status_code: 404}} ->
-        {:error, "404"}
+        {:error, "404 in code"}
 
       {:error, %HTTPoison.Error{reason: reason}} ->
         {:error, reason}
