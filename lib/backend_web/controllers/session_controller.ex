@@ -82,7 +82,7 @@ defmodule BackendWeb.SessionController do
         swagger_schema do
           title("SessionRequest")
           description("POST body for logging in")
-          property(:token, Schema.ref(:Session), "The slack token")
+          property(:token, :string, "The slack token")
 
           example(%{
             token: "some_slack_token"
