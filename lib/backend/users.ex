@@ -171,7 +171,9 @@ defmodule Backend.Users do
 
     case HTTPoison.post(
            "https://slack.com/api/oauth.v2.access",
-           "{\"body\": \"code\": {\"#{code}\"}}",
+           "{\"body\": {\"code\": \"#{code}\", \"client_id\": \"#{
+             Application.get_env(:backend, :slack_id)
+           }\", \"client_secret\": \"#{Application.get_env(:backend, :slack_secret)}\"}}",
            [{"Content-Type", "application/x-www-form-urlencoded"}]
          ) do
       {:ok,
