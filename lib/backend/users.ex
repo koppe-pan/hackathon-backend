@@ -50,7 +50,13 @@ defmodule Backend.Users do
       {:ok, user = %User{}} ->
         {:ok, user}
 
-      {:error, _reason} ->
+      {:error, reason} ->
+        {:error, reason}
+
+      user = %User{} ->
+        {:ok, user}
+
+      nil ->
         create_user_by_slack!(slack_company_id, %{slack_user_id: slack_user_id, name: user_name})
     end
   end
@@ -75,7 +81,8 @@ defmodule Backend.Users do
   end
 
   def create_user_by_slack!(slack_company_id, attrs \\ %{}) do
-    with {:ok, company} <- Companies.get_company_by_slack(slack_company_id) do
+    with company = %Backend.Companies.Company{} <-
+           Companies.get_company_by_slack(slack_company_id) do
       company
       |> Ecto.build_assoc(:users)
       |> User.changeset(attrs)
@@ -136,14 +143,16 @@ defmodule Backend.Users do
 
       case HTTPoison.post(
              "https://slack.com/api/auth.test",
-             "{\"body\": \"token\": {\"#{token}\"}}",
-             [{"Content-Type", "application/json"}]
+             "{\"body\": {\"token\": \"#{token}\"}}",
+             [{"Content-Type", "application/json"}, {"Authorization", "Bearer " <> token}]
            ) do
         {:ok,
          %HTTPoison.Response{
            status_code: 200,
            body: body
          }} ->
+          IO.inspect(body)
+
           case Jason.decode!(body) do
             %{
               "ok" => true,

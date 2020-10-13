@@ -108,18 +108,46 @@ defmodule Backend.Coupons do
   end
 
   def send_coupon(%{id: company_id, token: token} = _company) do
-    with {:ok, coupon} <-
+    with coupon = %Coupon{} <-
            company_id
            |> Backend.Users.list_users!()
            |> Enum.reduce(0, fn user, s -> user.point + s end)
            |> select_coupon() do
       HTTPoison.start()
 
-      HTTPoison.post(
-        "https://slack.com/api/chat.postMessage",
-        "{\"body\": {\"channel\": \"#random\", \"text\": \"#{coupon.description}\"}}",
-        [{"Content-Type", "application/json"}, {"Authorization", "Bearer " <> token}]
-      )
+      body =
+        Jason.encode!(%{
+          channel: "\#random",
+          text: coupon.description,
+          as_user: false
+        })
+
+      case HTTPoison.post(
+             "https://slack.com/api/chat.postMessage",
+             body,
+             [{"Content-Type", "application/json"}, {"Authorization", "Bearer " <> token}]
+           ) do
+        {:ok,
+         %HTTPoison.Response{
+           status_code: 200,
+           body: body
+         }} ->
+          case Jason.decode!(body) do
+            %{
+              "ok" => true
+            } ->
+              {:ok, "ok"}
+
+            %{"ok" => false, "error" => error} ->
+              {:error, error}
+          end
+
+        {:ok, %HTTPoison.Response{status_code: 404}} ->
+          {:error, "404 in coupon"}
+
+        {:error, %HTTPoison.Error{reason: reason}} ->
+          {:error, reason}
+      end
     end
   end
 

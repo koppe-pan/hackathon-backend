@@ -59,7 +59,25 @@ Backend.Repo.insert!(%Backend.HealthDatas.HealthData{
 })
 
 Backend.Repo.insert!(%Backend.Coupons.Coupon{
+  cost: 0,
+  description: "sample coupon",
+  life_time: ~N[2000-01-01 23:00:07]
+})
+
+Backend.Repo.insert!(%Backend.Coupons.Coupon{
+  cost: 100,
+  description: "sample coupon",
+  life_time: ~N[2000-01-01 23:00:07]
+})
+
+Backend.Repo.insert!(%Backend.Coupons.Coupon{
   cost: 1000,
+  description: "sample coupon",
+  life_time: ~N[2000-01-01 23:00:07]
+})
+
+Backend.Repo.insert!(%Backend.Coupons.Coupon{
+  cost: 100_000,
   description: "sample coupon",
   life_time: ~N[2000-01-01 23:00:07]
 })

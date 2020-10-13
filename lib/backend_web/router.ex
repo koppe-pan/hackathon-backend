@@ -15,7 +15,6 @@ defmodule BackendWeb.Router do
 
   scope "/api", BackendWeb do
     pipe_through(:api)
-    post("/login", SessionController, :login)
     get("/callback", SessionController, :callback)
   end
 
@@ -26,6 +25,7 @@ defmodule BackendWeb.Router do
       resources("/users", UserController, except: [:new, :create, :edit])
     end
 
+    get("/coupons/send", CouponController, :send)
     resources("/coupons", CouponController, except: [:new, :edit])
 
     resources "/users", UserController, only: [] do

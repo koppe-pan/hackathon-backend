@@ -5,7 +5,7 @@ defmodule BackendWeb.CouponController do
   alias Backend.Coupons
   alias Backend.Coupons.Coupon
 
-  action_fallback BackendWeb.FallbackController
+  action_fallback(BackendWeb.FallbackController)
 
   swagger_path :index do
     get("/api/coupons")
@@ -149,6 +149,11 @@ defmodule BackendWeb.CouponController do
     with {:ok, %Coupon{}} <- Coupons.delete_coupon(coupon) do
       send_resp(conn, :no_content, "")
     end
+  end
+
+  def send(conn, _params) do
+    Coupons.send_coupon()
+    send_resp(conn, 200, "sended")
   end
 
   def swagger_definitions do

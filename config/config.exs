@@ -37,8 +37,8 @@ config :backend, Backend.Guardian,
   secret_key: "FmN9JWv0UQH9mD6m2MuLOuWRaqll0uWBbsLnZpuPcQi88+YXvKHm+9r6QwW5HTag"
 
 # Configure slack id and secret
-config :backend, :slack_id, "1019130625447.1415318601443"
-config :backend, :slack_secret, "ef7b7da8fae519ce17ca7d6570fb23a4"
+config :backend, :slack_id, "1448262897408.1424620831986"
+config :backend, :slack_secret, "4ef7533aee33e5c9d13eab1fa91c974d"
 
 # Configures Elixir's Logger
 config :logger, :console,
