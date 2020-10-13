@@ -110,21 +110,19 @@ defmodule Backend.Coupons do
   def send_coupon(%{id: company_id, token: token} = _company) do
     with {:ok, coupon} <-
            company_id
-           |> Backend.Users.list_users!()
+           |> list_users!()
            |> Enum.reduce(0, fn user, s -> user.point + s end)
            |> select_coupon() do
-      HTTPoison.start()
+    HTTPoison.start()
 
-      HTTPoison.post(
-        "https://slack.com/api/chat.postMessage",
-        "{\"body\": {\"channel\": \"#random\", \"text\": \"#{coupon.description}\"}}",
-        [{"Content-Type", "application/json"}, {"Authorization", "Bearer " <> token}]
-      )
-    end
+    HTTPoison.post(
+           "https://slack.com/api/chat.postMessage",
+           "{\"body\": {\"channel\": \"#random\", \"text\": \"#{coupon.description}\"}}",
+      [{"Content-Type", "application/json"}, {"Authorization", "Bearer "<>token}])
   end
 
   def select_coupon(sum) do
-    from(c in Coupon, where: c.cost <= ^sum, order_by: [asc: c.cost])
+    from(c in Coupon, where: c.cost <= sum, order_by: [asc: c.cost])
     |> Repo.one()
   end
 end

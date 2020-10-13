@@ -10,12 +10,12 @@ RUN apt-get update && \
 
 # Create app directory and copy the Elixir projects into it
 RUN mkdir /app
-COPY ./mix.exs /app/mix.exs
+COPY ./mix* /app/
 WORKDIR /app
 
 # Compile the project
 RUN  mix deps.get && mix compile
-COPY . /app/
+COPY ./!mix.lock /app/
 
 
 CMD ["/app/entrypoint.sh"]
