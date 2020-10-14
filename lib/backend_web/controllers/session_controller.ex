@@ -49,9 +49,11 @@ defmodule BackendWeb.SessionController do
       {:ok, user} ->
         {:ok, jwt, _claims} = Guardian.encode_and_sign(user)
 
+        # |> put_resp_cookie("token", jwt)
         conn
-        |> put_req_header("authorization", "Bearer " <> jwt)
+        |> put_resp_header("authorization", "Bearer " <> jwt)
         |> redirect(external: "http://localhost:3000/dashboard")
+        |> halt()
 
       {:error, reason} ->
         conn

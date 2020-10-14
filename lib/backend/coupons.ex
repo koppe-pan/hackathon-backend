@@ -110,7 +110,15 @@ defmodule Backend.Coupons do
 
   def send_coupon() do
     Backend.Companies.list_companies()
-    |> Enum.each(fn company -> send_coupon(company) end)
+    |> Enum.each(fn company ->
+      case send_coupon(company) do
+        {:ok, _} ->
+          :ok
+
+        {:error, reason} ->
+          IO.puts(reason)
+      end
+    end)
   end
 
   def send_coupon(%{id: company_id, token: token} = _company) do
@@ -120,8 +128,7 @@ defmodule Backend.Coupons do
       body =
         Jason.encode!(%{
           channel: "\#random",
-          text: coupon.description,
-          as_user: false
+          text: coupon.description
         })
 
       case HTTPoison.post(
