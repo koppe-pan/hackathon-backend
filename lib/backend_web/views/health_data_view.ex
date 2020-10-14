@@ -3,11 +3,11 @@ defmodule BackendWeb.HealthDataView do
   alias BackendWeb.HealthDataView
 
   def render("index.json", %{health_datas: health_datas}) do
-    %{data: render_many(health_datas, HealthDataView, "health_data.json")}
+    render_many(health_datas, HealthDataView, "health_data.json")
   end
 
   def render("show.json", %{health_data: health_data}) do
-    %{data: render_one(health_data, HealthDataView, "health_data.json")}
+    render_one(health_data, HealthDataView, "health_data.json")
   end
 
   def render("health_data.json", %{health_data: health_data}) do

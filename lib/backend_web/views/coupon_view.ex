@@ -3,11 +3,11 @@ defmodule BackendWeb.CouponView do
   alias BackendWeb.CouponView
 
   def render("index.json", %{coupons: coupons}) do
-    %{data: render_many(coupons, CouponView, "coupon.json")}
+    render_many(coupons, CouponView, "coupon.json")
   end
 
   def render("show.json", %{coupon: coupon}) do
-    %{data: render_one(coupon, CouponView, "coupon.json")}
+    render_one(coupon, CouponView, "coupon.json")
   end
 
   def render("coupon.json", %{coupon: coupon}) do

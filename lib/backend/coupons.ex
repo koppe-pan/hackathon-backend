@@ -128,7 +128,8 @@ defmodule Backend.Coupons do
       body =
         Jason.encode!(%{
           channel: "\#random",
-          text: coupon.description
+          text: coupon.description,
+          username: "hoge"
         })
 
       case HTTPoison.post(
