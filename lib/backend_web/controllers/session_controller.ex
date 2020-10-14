@@ -47,6 +47,18 @@ defmodule BackendWeb.SessionController do
     end
   end
 
+  swagger_path :health do
+    summary("health check")
+
+    description("for health check. always return 200")
+    tag("Sessions")
+    response(200, "OK")
+  end
+
+  def health(conn, _params) do
+    send_resp(conn, 200, "OK")
+  end
+
   def callback(conn, %{"code" => code}) do
     case Users.authenticate_user(code) do
       {:ok, user} ->

@@ -16,6 +16,7 @@ defmodule BackendWeb.Router do
   scope "/api", BackendWeb do
     pipe_through(:api)
     get("/callback", SessionController, :callback)
+    get("/health", SessionController, :health)
   end
 
   scope "/api", BackendWeb do
