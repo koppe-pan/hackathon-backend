@@ -106,6 +106,12 @@ defmodule Backend.Companies do
     Company.changeset(company, attrs)
   end
 
+  def sum_point(company_id) do
+    company_id
+    |> Backend.Users.list_users!()
+    |> Enum.reduce(0, fn user, s -> user.point + s end)
+  end
+
   def ensure_company_exist!(slack_company_id, company_token) do
     case get_company_by_slack(slack_company_id) do
       company = %Company{} ->

@@ -120,6 +120,28 @@ defmodule BackendWeb.CompanyController do
   end
   """
 
+  swagger_path :show_point do
+    summary("Sum of company points")
+    tag("Companys")
+    parameter(:id, :path, :integer, "Company ID", required: true, example: 3)
+
+    response(
+      200,
+      "OK",
+      Schema.ref(:CompanyCouponResponse),
+      example: %{
+        data: %{
+          point: 800
+        }
+      }
+    )
+  end
+
+  def show_point(conn, %{"id" => id}) do
+    point = Companies.sum_point(id)
+    render(conn, "point.json", point: point)
+  end
+
   swagger_path :delete do
     PhoenixSwagger.Path.delete("/api/companies/{id}")
     summary("Delete Company")
@@ -152,6 +174,15 @@ defmodule BackendWeb.CompanyController do
             id: 123
           })
         end,
+      CompanyCoupon:
+        swagger_schema do
+          title("Coupon")
+          description("sum of point")
+
+          properties do
+            point(:integer, "sum of point")
+          end
+        end,
       CompanyRequest:
         swagger_schema do
           title("CompanyRequest")
@@ -167,6 +198,12 @@ defmodule BackendWeb.CompanyController do
           title("CompanyResponse")
           description("Response schema for single company")
           property(:data, Schema.ref(:Company), "The company details")
+        end,
+      CompanyCouponResponse:
+        swagger_schema do
+          title("CompanyCouponResponse")
+          description("Response schema for single company")
+          property(:data, Schema.ref(:CompanyCoupon), "The company details")
         end,
       CompanysResponse:
         swagger_schema do

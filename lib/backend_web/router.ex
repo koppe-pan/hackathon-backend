@@ -25,6 +25,8 @@ defmodule BackendWeb.Router do
       resources("/users", UserController, except: [:new, :create, :edit])
     end
 
+    get("/companies/:id/point", CompanyController, :show_point)
+
     get("/coupons/send", CouponController, :send)
     get("/companies/:company_id/coupons", CouponController, :show_by_company)
     resources("/coupons", CouponController, except: [:new, :edit])

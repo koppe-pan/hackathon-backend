@@ -10,6 +10,10 @@ defmodule BackendWeb.CompanyView do
     %{data: render_one(company, CompanyView, "company.json")}
   end
 
+  def render("point.json", %{point: point}) do
+    %{data: %{point: point}}
+  end
+
   def render("company.json", %{company: company}) do
     %{id: company.id}
   end

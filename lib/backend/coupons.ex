@@ -116,8 +116,7 @@ defmodule Backend.Coupons do
   def send_coupon(%{id: company_id, token: token} = _company) do
     with coupon = %Coupon{} <-
            company_id
-           |> Backend.Users.list_users!()
-           |> Enum.reduce(0, fn user, s -> user.point + s end)
+           |> Backend.Companies.sum_point()
            |> select_coupon() do
       HTTPoison.start()
 
