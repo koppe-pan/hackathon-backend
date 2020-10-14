@@ -6,7 +6,7 @@ defmodule BackendWeb.Router do
   end
 
   pipeline :api_auth do
-    # plug(Backend.Guardian.AuthPipeline)
+    plug(Backend.Guardian.AuthPipeline)
   end
 
   scope "/api/swagger" do

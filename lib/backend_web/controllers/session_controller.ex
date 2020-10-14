@@ -32,21 +32,6 @@ defmodule BackendWeb.SessionController do
     )
   end
 
-  def login(conn, %{"token" => token}) do
-    case Users.authenticate_user(token) do
-      {:ok, user} ->
-        {:ok, jwt, _claims} = Guardian.encode_and_sign(user)
-
-        conn
-        |> render("login.json", user: user, jwt: jwt)
-
-      {:error, reason} ->
-        conn
-        |> put_status(401)
-        |> render("401.json", message: reason)
-    end
-  end
-
   swagger_path :health do
     summary("health check")
 
@@ -65,7 +50,8 @@ defmodule BackendWeb.SessionController do
         {:ok, jwt, _claims} = Guardian.encode_and_sign(user)
 
         conn
-        |> render("login.json", user: user, jwt: jwt)
+        |> put_req_header("authorization", "Bearer " <> jwt)
+        |> redirect(external: "https://localhost:3000/dashboard")
 
       {:error, reason} ->
         conn

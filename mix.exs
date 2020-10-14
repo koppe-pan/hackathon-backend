@@ -46,6 +46,7 @@ defmodule Backend.MixProject do
       {:phoenix_swagger, "~> 0.8"},
       {:ex_json_schema, "~> 0.5"},
       {:guardian, "~> 2.0"},
+      {:cors_plug, "~> 2.0"},
       {:httpoison, "~> 1.6"}
     ]
   end
