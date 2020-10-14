@@ -14,18 +14,16 @@ defmodule BackendWeb.CouponController do
     tag("Coupons")
     produces("application/json")
 
-    response(200, "OK", Schema.ref(:CouponsResponse),
-      example: %{
-        data: [
-          %{
-            id: 1,
-            cost: 42,
-            description: "some description",
-            created_at: "2010-04-17 14:00:00",
-            life_time: "2010-04-17 14:00:00"
-          }
-        ]
-      }
+    response(200, "OK", Schema.array(:Coupon),
+      example: [
+        %{
+          id: 1,
+          cost: 42,
+          description: "some description",
+          created_at: "2010-04-17 14:00:00",
+          life_time: "2010-04-17 14:00:00"
+        }
+      ]
     )
   end
 
@@ -48,15 +46,13 @@ defmodule BackendWeb.CouponController do
       }
     )
 
-    response(201, "Coupon created OK", Schema.ref(:CouponResponse),
+    response(201, "Coupon created OK", Schema.ref(:Coupon),
       example: %{
-        data: %{
-          id: 1,
-          cost: 42,
-          description: "some description",
-          created_at: "2010-04-17 14:00:00",
-          life_time: "2010-04-17 14:00:00"
-        }
+        id: 1,
+        cost: 42,
+        description: "some description",
+        created_at: "2010-04-17 14:00:00",
+        life_time: "2010-04-17 14:00:00"
       }
     )
   end
@@ -77,15 +73,13 @@ defmodule BackendWeb.CouponController do
     produces("application/json")
     parameter(:company_id, :path, :integer, "Company ID", required: true, example: 123)
 
-    response(200, "OK", Schema.ref(:CouponResponse),
+    response(200, "OK", Schema.ref(:Coupon),
       example: %{
-        data: %{
-          id: 123,
-          cost: 42,
-          description: "some description",
-          created_at: "2010-04-17 14:00:00",
-          life_time: "2010-04-17 14:00:00"
-        }
+        id: 123,
+        cost: 42,
+        description: "some description",
+        created_at: "2010-04-17 14:00:00",
+        life_time: "2010-04-17 14:00:00"
       }
     )
   end
@@ -102,15 +96,13 @@ defmodule BackendWeb.CouponController do
     produces("application/json")
     parameter(:company_id, :path, :integer, "Company ID", required: true, example: 123)
 
-    response(200, "OK", Schema.ref(:CouponResponse),
+    response(200, "OK", Schema.ref(:Coupon),
       example: %{
-        data: %{
-          id: 123,
-          cost: 42,
-          description: "some description",
-          created_at: "2010-04-17 14:00:00",
-          life_time: "2010-04-17 14:00:00"
-        }
+        id: 123,
+        cost: 42,
+        description: "some description",
+        created_at: "2010-04-17 14:00:00",
+        life_time: "2010-04-17 14:00:00"
       }
     )
   end
@@ -127,15 +119,13 @@ defmodule BackendWeb.CouponController do
     produces("application/json")
     parameter(:company_id, :path, :integer, "Company ID", required: true, example: 123)
 
-    response(200, "OK", Schema.ref(:CouponResponse),
+    response(200, "OK", Schema.ref(:Coupon),
       example: %{
-        data: %{
-          id: 123,
-          cost: 42,
-          description: "some description",
-          created_at: "2010-04-17 14:00:00",
-          life_time: "2010-04-17 14:00:00"
-        }
+        id: 123,
+        cost: 42,
+        description: "some description",
+        created_at: "2010-04-17 14:00:00",
+        life_time: "2010-04-17 14:00:00"
       }
     )
   end
@@ -152,15 +142,13 @@ defmodule BackendWeb.CouponController do
     produces("application/json")
     parameter(:id, :path, :integer, "Coupon ID", required: true, example: 123)
 
-    response(200, "OK", Schema.ref(:CouponResponse),
+    response(200, "OK", Schema.ref(:Coupon),
       example: %{
-        data: %{
-          id: 123,
-          cost: 42,
-          description: "some description",
-          created_at: "2010-04-17 14:00:00",
-          life_time: "2010-04-17 14:00:00"
-        }
+        id: 123,
+        cost: 42,
+        description: "some description",
+        created_at: "2010-04-17 14:00:00",
+        life_time: "2010-04-17 14:00:00"
       }
     )
   end
@@ -188,15 +176,13 @@ defmodule BackendWeb.CouponController do
       )
     end
 
-    response(200, "Updated Successfully", Schema.ref(:CouponResponse),
+    response(200, "Updated Successfully", Schema.ref(:Coupon),
       example: %{
-        data: %{
-          id: 3,
-          cost: 42,
-          description: "some description",
-          created_at: "2010-04-17 14:00:00",
-          life_time: "2010-04-17 14:00:00"
-        }
+        id: 3,
+        cost: 42,
+        description: "some description",
+        created_at: "2010-04-17 14:00:00",
+        life_time: "2010-04-17 14:00:00"
       }
     )
   end
@@ -224,6 +210,14 @@ defmodule BackendWeb.CouponController do
     with {:ok, %Coupon{}} <- Coupons.delete_coupon(coupon) do
       send_resp(conn, :no_content, "")
     end
+  end
+
+  swagger_path :send do
+    summary("send coupon")
+
+    description("demo of sending coupon to slack")
+    tag("Coupons")
+    response(200, "sended")
   end
 
   def send(conn, _params) do
@@ -266,18 +260,6 @@ defmodule BackendWeb.CouponController do
               life_time: "2010-04-17 14:00:00"
             }
           })
-        end,
-      CouponResponse:
-        swagger_schema do
-          title("CouponResponse")
-          description("Response schema for single coupon")
-          property(:data, Schema.ref(:Coupon), "The coupon details")
-        end,
-      CouponsResponse:
-        swagger_schema do
-          title("CouponsReponse")
-          description("Response schema for multiple coupons")
-          property(:data, Schema.array(:Coupon), "The coupons details")
         end
     }
   end

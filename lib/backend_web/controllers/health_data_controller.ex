@@ -15,17 +15,15 @@ defmodule BackendWeb.HealthDataController do
     produces("application/json")
     parameter(:user_id, :path, :integer, "User ID", required: true, example: 3)
 
-    response(200, "OK", Schema.ref(:HealthDatasResponse),
-      example: %{
-        data: [
-          %{
-            id: 1,
-            comment: "some comment",
-            date: ~D[2010-04-17],
-            step: 42
-          }
-        ]
-      }
+    response(200, "OK", Schema.array(:HealthData),
+      example: [
+        %{
+          id: 1,
+          comment: "some comment",
+          date: ~D[2010-04-17],
+          step: 42
+        }
+      ]
     )
   end
 
@@ -42,17 +40,15 @@ defmodule BackendWeb.HealthDataController do
     produces("application/json")
     parameter(:company_id, :path, :integer, "User ID", required: true, example: 3)
 
-    response(200, "OK", Schema.ref(:HealthDatasResponse),
-      example: %{
-        data: [
-          %{
-            id: 1,
-            comment: "some comment",
-            date: ~D[2010-04-17],
-            step: 42
-          }
-        ]
-      }
+    response(200, "OK", Schema.array(:HealthData),
+      example: [
+        %{
+          id: 1,
+          comment: "some comment",
+          date: ~D[2010-04-17],
+          step: 42
+        }
+      ]
     )
   end
 
@@ -77,14 +73,12 @@ defmodule BackendWeb.HealthDataController do
       }
     )
 
-    response(201, "HealthData created OK", Schema.ref(:HealthDataResponse),
+    response(201, "HealthData created OK", Schema.ref(:HealthData),
       example: %{
-        data: %{
-          id: 1,
-          comment: "some comment",
-          date: ~D[2010-04-17],
-          step: 42
-        }
+        id: 1,
+        comment: "some comment",
+        date: ~D[2010-04-17],
+        step: 42
       }
     )
   end
@@ -110,14 +104,12 @@ defmodule BackendWeb.HealthDataController do
     parameter(:user_id, :path, :integer, "User ID", required: true, example: 3)
     parameter(:id, :path, :integer, "HealthData ID", required: true, example: 123)
 
-    response(200, "OK", Schema.ref(:HealthDataResponse),
+    response(200, "OK", Schema.ref(:HealthData),
       example: %{
-        data: %{
-          id: 123,
-          comment: "some comment",
-          date: ~D[2010-04-17],
-          step: 42
-        }
+        id: 123,
+        comment: "some comment",
+        date: ~D[2010-04-17],
+        step: 42
       }
     )
   end
@@ -147,14 +139,12 @@ defmodule BackendWeb.HealthDataController do
       )
     end
 
-    response(200, "Updated Successfully", Schema.ref(:HealthDataResponse),
+    response(200, "Updated Successfully", Schema.ref(:HealthData),
       example: %{
-        data: %{
-          id: 3,
-          comment: "some comment",
-          date: ~D[2010-04-17],
-          step: 42
-        }
+        id: 3,
+        comment: "some comment",
+        date: ~D[2010-04-17],
+        step: 42
       }
     )
   end
@@ -220,18 +210,6 @@ defmodule BackendWeb.HealthDataController do
               step: 42
             }
           })
-        end,
-      HealthDataResponse:
-        swagger_schema do
-          title("HealthDataResponse")
-          description("Response schema for single health_data")
-          property(:data, Schema.ref(:HealthData), "The health_data details")
-        end,
-      HealthDatasResponse:
-        swagger_schema do
-          title("HealthDatasReponse")
-          description("Response schema for multiple health_datas")
-          property(:data, Schema.array(:HealthData), "The health_datas details")
         end
     }
   end

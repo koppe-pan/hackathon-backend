@@ -14,14 +14,12 @@ defmodule BackendWeb.CompanyController do
     tag("Companys")
     produces("application/json")
 
-    response(200, "OK", Schema.ref(:CompanysResponse),
-      example: %{
-        data: [
-          %{
-            id: 1
-          }
-        ]
-      }
+    response(200, "OK", Schema.array(:Company),
+      example: [
+        %{
+          id: 1
+        }
+      ]
     )
   end
 
@@ -128,11 +126,9 @@ defmodule BackendWeb.CompanyController do
     response(
       200,
       "OK",
-      Schema.ref(:CompanyCouponResponse),
+      Schema.ref(:CompanyCoupon),
       example: %{
-        data: %{
-          point: 800
-        }
+        point: 800
       }
     )
   end
@@ -192,24 +188,6 @@ defmodule BackendWeb.CompanyController do
           example(%{
             company: %{}
           })
-        end,
-      CompanyResponse:
-        swagger_schema do
-          title("CompanyResponse")
-          description("Response schema for single company")
-          property(:data, Schema.ref(:Company), "The company details")
-        end,
-      CompanyCouponResponse:
-        swagger_schema do
-          title("CompanyCouponResponse")
-          description("Response schema for single company")
-          property(:data, Schema.ref(:CompanyCoupon), "The company details")
-        end,
-      CompanysResponse:
-        swagger_schema do
-          title("CompanysReponse")
-          description("Response schema for multiple companies")
-          property(:data, Schema.array(:Company), "The companies details")
         end
     }
   end

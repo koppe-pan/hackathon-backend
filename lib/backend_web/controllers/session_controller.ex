@@ -23,11 +23,9 @@ defmodule BackendWeb.SessionController do
       }
     )
 
-    response(200, "OK", Schema.ref(:SessionResponse),
+    response(200, "OK", Schema.ref(:Session),
       example: %{
-        data: %{
-          token: "some jwt token"
-        }
+        token: "some jwt token"
       }
     )
   end
@@ -102,12 +100,6 @@ defmodule BackendWeb.SessionController do
           example(%{
             token: "some_slack_token"
           })
-        end,
-      SessionResponse:
-        swagger_schema do
-          title("SessionResponse")
-          description("Response schema for session")
-          property(:data, Schema.ref(:Session), "The session details")
         end
     }
   end

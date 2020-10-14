@@ -15,17 +15,10 @@ defmodule BackendWeb.UserController do
     produces("application/json")
     parameter(:company_id, :path, :integer, "Company ID", required: true, example: 3)
 
-    response(200, "OK", Schema.ref(:UsersResponse),
-      example: %{
-        data: [
-          %{
-            id: 1,
-            name: "some name",
-            point: 42,
-            role: "some role"
-          }
-        ]
-      }
+    response(200, "OK", Schema.array(:User),
+      example: [
+        %{id: 1, name: "some name", point: 42, role: "some role"}
+      ]
     )
   end
 
@@ -77,28 +70,20 @@ defmodule BackendWeb.UserController do
     tag("Users")
     produces("application/json")
 
-    response(200, "OK", Schema.ref(:MeResponse),
+    response(200, "OK", Schema.ref(:User),
       example: %{
-        data: %{
-          company_id: 1,
-          id: 123,
-          name: "some name",
-          point: 42,
-          role: "some role"
-        }
+        company_id: 1,
+        id: 123,
+        name: "some name",
+        point: 42,
+        role: "some role"
       }
     )
   end
 
   def me(conn, _attrs) do
     user = %User{} = Guardian.Plug.current_resource(conn)
-
-    company =
-      %Backend.Companies.Company{} =
-      user.id
-      |> Backend.Companies.get_company_by_user!()
-
-    render(conn, "me.json", user: user, company_id: company.id)
+    render(conn, "me.json", user: user)
   end
 
   swagger_path :show do
@@ -109,14 +94,12 @@ defmodule BackendWeb.UserController do
     parameter(:company_id, :path, :integer, "Company ID", required: true, example: 3)
     parameter(:id, :path, :integer, "User ID", required: true, example: 123)
 
-    response(200, "OK", Schema.ref(:UserResponse),
+    response(200, "OK", Schema.ref(:User),
       example: %{
-        data: %{
-          id: 123,
-          name: "some name",
-          point: 42,
-          role: "some role"
-        }
+        id: 123,
+        name: "some name",
+        point: 42,
+        role: "some role"
       }
     )
   end
@@ -145,14 +128,12 @@ defmodule BackendWeb.UserController do
       )
     end
 
-    response(200, "Updated Successfully", Schema.ref(:UserResponse),
+    response(200, "Updated Successfully", Schema.ref(:User),
       example: %{
-        data: %{
-          id: 3,
-          name: "some name",
-          point: 42,
-          role: "some role"
-        }
+        id: 3,
+        name: "some name",
+        point: 42,
+        role: "some role"
       }
     )
   end
@@ -195,25 +176,6 @@ defmodule BackendWeb.UserController do
           description("A user of the app")
 
           properties do
-            id(:integer, "User ID")
-            name(:string, "User name")
-            point(:string, "User point")
-            role(:string, "User role")
-          end
-
-          example(%{
-            id: 123,
-            name: "some name",
-            point: 42,
-            role: "some role"
-          })
-        end,
-      Me:
-        swagger_schema do
-          title("User")
-          description("A user of the app")
-
-          properties do
             company_id(:integer, "Company ID")
             id(:integer, "User ID")
             name(:string, "User name")
@@ -222,6 +184,7 @@ defmodule BackendWeb.UserController do
           end
 
           example(%{
+            company_id: 1,
             id: 123,
             name: "some name",
             point: 42,
@@ -240,24 +203,6 @@ defmodule BackendWeb.UserController do
               role: "some role"
             }
           })
-        end,
-      UserResponse:
-        swagger_schema do
-          title("UserResponse")
-          description("Response schema for single user")
-          property(:data, Schema.ref(:User), "The user details")
-        end,
-      MeResponse:
-        swagger_schema do
-          title("UserResponse")
-          description("Response schema for single user")
-          property(:data, Schema.ref(:Me), "The user details")
-        end,
-      UsersResponse:
-        swagger_schema do
-          title("UsersReponse")
-          description("Response schema for multiple users")
-          property(:data, Schema.array(:User), "The users details")
         end
     }
   end
