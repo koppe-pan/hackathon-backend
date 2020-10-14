@@ -6,6 +6,7 @@ defmodule Backend.Companies.Company do
     field(:slack_company_id, :string, unique: true)
     field(:token, :string)
     has_many(:users, Backend.Users.User)
+    belongs_to(:coupon, Backend.Coupons.Coupon)
 
     timestamps()
   end

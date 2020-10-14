@@ -8,7 +8,6 @@ defmodule Backend.Users.User do
     field(:point, :integer, default: 0)
     field(:role, :string)
     has_many(:health_datas, Backend.HealthDatas.HealthData)
-    has_many(:coupons, Backend.Coupons.Coupon)
     belongs_to(:company, Backend.Companies.Company)
 
     timestamps()

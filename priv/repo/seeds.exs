@@ -9,14 +9,40 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+Backend.Repo.insert!(%Backend.Coupons.Coupon{
+  cost: 0,
+  description: "sample coupon",
+  life_time: ~N[2000-01-01 23:00:07]
+})
+
+Backend.Repo.insert!(%Backend.Coupons.Coupon{
+  cost: 100,
+  description: "sample coupon",
+  life_time: ~N[2000-01-01 23:00:07]
+})
+
+Backend.Repo.insert!(%Backend.Coupons.Coupon{
+  cost: 1000,
+  description: "sample coupon",
+  life_time: ~N[2000-01-01 23:00:07]
+})
+
+Backend.Repo.insert!(%Backend.Coupons.Coupon{
+  cost: 100_000,
+  description: "sample coupon",
+  life_time: ~N[2000-01-01 23:00:07]
+})
+
 Backend.Repo.insert!(%Backend.Companies.Company{
   slack_company_id: "sample_company_id",
-  token: "some_token"
+  token: "some_token",
+  coupon_id: 1
 })
 
 Backend.Repo.insert!(%Backend.Companies.Company{
   slack_company_id: "sample_company_id_2",
-  token: "some_token_2"
+  token: "some_token_2",
+  coupon_id: 2
 })
 
 Backend.Repo.insert!(%Backend.Users.User{
@@ -56,28 +82,4 @@ Backend.Repo.insert!(%Backend.HealthDatas.HealthData{
   date: ~D[2000-01-01],
   step: 100,
   user_id: 3
-})
-
-Backend.Repo.insert!(%Backend.Coupons.Coupon{
-  cost: 0,
-  description: "sample coupon",
-  life_time: ~N[2000-01-01 23:00:07]
-})
-
-Backend.Repo.insert!(%Backend.Coupons.Coupon{
-  cost: 100,
-  description: "sample coupon",
-  life_time: ~N[2000-01-01 23:00:07]
-})
-
-Backend.Repo.insert!(%Backend.Coupons.Coupon{
-  cost: 1000,
-  description: "sample coupon",
-  life_time: ~N[2000-01-01 23:00:07]
-})
-
-Backend.Repo.insert!(%Backend.Coupons.Coupon{
-  cost: 100_000,
-  description: "sample coupon",
-  life_time: ~N[2000-01-01 23:00:07]
 })
