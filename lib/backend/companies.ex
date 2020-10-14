@@ -41,6 +41,12 @@ defmodule Backend.Companies do
     Repo.get_by(Company, slack_company_id: slack_company_id)
   end
 
+  def get_company_by_user!(user_id) do
+    Backend.Users.get_user!(user_id)
+    |> Repo.preload(:company)
+    |> Map.get(:company)
+  end
+
   @doc """
   Creates a company.
 

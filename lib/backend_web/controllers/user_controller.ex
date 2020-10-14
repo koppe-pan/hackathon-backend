@@ -71,6 +71,36 @@ defmodule BackendWeb.UserController do
   end
   """
 
+  swagger_path :me do
+    summary("Show Me")
+    description("Show Me")
+    tag("Users")
+    produces("application/json")
+
+    response(200, "OK", Schema.ref(:MeResponse),
+      example: %{
+        data: %{
+          company_id: 1,
+          id: 123,
+          name: "some name",
+          point: 42,
+          role: "some role"
+        }
+      }
+    )
+  end
+
+  def me(conn, _attrs) do
+    user = %User{} = Guardian.Plug.current_resource(conn)
+
+    company = %Backend.Companies.Company{}
+
+    user.id
+    |> Backend.Companies.get_company_by_user!()
+
+    render(conn, "me.json", user: user, company_id: company.id)
+  end
+
   swagger_path :show do
     summary("Show User")
     description("Show a user by ID")
@@ -165,6 +195,25 @@ defmodule BackendWeb.UserController do
           description("A user of the app")
 
           properties do
+            id(:integer, "User ID")
+            name(:string, "User name")
+            point(:string, "User point")
+            role(:string, "User role")
+          end
+
+          example(%{
+            id: 123,
+            name: "some name",
+            point: 42,
+            role: "some role"
+          })
+        end,
+      Me:
+        swagger_schema do
+          title("User")
+          description("A user of the app")
+
+          properties do
             company_id(:integer, "Company ID")
             id(:integer, "User ID")
             name(:string, "User name")
@@ -197,6 +246,12 @@ defmodule BackendWeb.UserController do
           title("UserResponse")
           description("Response schema for single user")
           property(:data, Schema.ref(:User), "The user details")
+        end,
+      MeResponse:
+        swagger_schema do
+          title("UserResponse")
+          description("Response schema for single user")
+          property(:data, Schema.ref(:Me), "The user details")
         end,
       UsersResponse:
         swagger_schema do
