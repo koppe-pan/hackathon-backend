@@ -51,7 +51,7 @@ defmodule BackendWeb.SessionController do
 
         conn
         |> put_req_header("authorization", "Bearer " <> jwt)
-        |> redirect(external: "https://localhost:3000/dashboard")
+        |> redirect(external: "http://localhost:3000/dashboard")
 
       {:error, reason} ->
         conn
