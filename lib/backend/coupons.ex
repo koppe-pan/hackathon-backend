@@ -37,6 +37,12 @@ defmodule Backend.Coupons do
   """
   def get_coupon!(id), do: Repo.get!(Coupon, id)
 
+  def get_coupon_by_company!(company_id) do
+    Backend.Companies.get_company!(company_id)
+    |> Repo.preload(:coupon)
+    |> Map.get(:coupon)
+  end
+
   @doc """
   Creates a coupon.
 

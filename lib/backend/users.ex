@@ -47,12 +47,6 @@ defmodule Backend.Users do
 
   def get_or_create_user!(slack_company_id, slack_user_id, user_name) do
     case get_user_by_slack(slack_user_id) do
-      {:ok, user = %User{}} ->
-        {:ok, user}
-
-      {:error, reason} ->
-        {:error, reason}
-
       user = %User{} ->
         {:ok, user}
 

@@ -70,6 +70,31 @@ defmodule BackendWeb.CouponController do
     end
   end
 
+  swagger_path :show_by_company do
+    summary("Show Coupon By Company_id")
+    description("Show a coupon by ID")
+    tag("Coupons")
+    produces("application/json")
+    parameter(:company_id, :path, :integer, "Company ID", required: true, example: 123)
+
+    response(200, "OK", Schema.ref(:CouponResponse),
+      example: %{
+        data: %{
+          id: 123,
+          cost: 42,
+          description: "some description",
+          created_at: "2010-04-17 14:00:00",
+          life_time: "2010-04-17 14:00:00"
+        }
+      }
+    )
+  end
+
+  def show_by_company(conn, %{"company_id" => company_id}) do
+    coupon = Coupons.get_coupon_by_company!(company_id)
+    render(conn, "show.json", coupon: coupon)
+  end
+
   swagger_path :show do
     summary("Show Coupon")
     description("Show a coupon by ID")
