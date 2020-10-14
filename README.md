@@ -3,6 +3,7 @@
 
 ### 1. `docker-compose build`
 ### 2. `docker-compose up`
+### (update DB) `docker-compose run --rm phoenix mix ecto.reset`
 
 # Backend
 

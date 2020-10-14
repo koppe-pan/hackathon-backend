@@ -114,10 +114,7 @@ defmodule Backend.Coupons do
   end
 
   def send_coupon(%{id: company_id, token: token} = _company) do
-    with coupon = %Coupon{} <-
-           company_id
-           |> Backend.Companies.sum_point()
-           |> select_coupon() do
+    with coupon = %Coupon{} <- select_current_coupon(company_id) do
       HTTPoison.start()
 
       body =
@@ -156,8 +153,27 @@ defmodule Backend.Coupons do
     end
   end
 
-  def select_coupon(sum) do
-    from(c in Coupon, where: c.cost <= ^sum, order_by: [asc: c.cost])
+  def select_current_coupon(company_id) do
+    company_id
+    |> Backend.Companies.sum_point()
+    |> select_current_coupon_by_sum()
+  end
+
+  def select_next_coupon(company_id) do
+    company_id
+    |> Backend.Companies.sum_point()
+    |> select_next_coupon_by_sum()
+  end
+
+  defp select_current_coupon_by_sum(sum) do
+    from(c in Coupon, where: c.cost <= ^sum, order_by: [desc: c.cost])
+    |> first()
+    |> Repo.one()
+  end
+
+  defp select_next_coupon_by_sum(sum) do
+    from(c in Coupon, where: c.cost > ^sum, order_by: [asc: c.cost])
+    |> first()
     |> Repo.one()
   end
 end
