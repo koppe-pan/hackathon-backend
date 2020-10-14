@@ -93,10 +93,10 @@ defmodule BackendWeb.UserController do
   def me(conn, _attrs) do
     user = %User{} = Guardian.Plug.current_resource(conn)
 
-    company = %Backend.Companies.Company{}
-
-    user.id
-    |> Backend.Companies.get_company_by_user!()
+    company =
+      %Backend.Companies.Company{} =
+      user.id
+      |> Backend.Companies.get_company_by_user!()
 
     render(conn, "me.json", user: user, company_id: company.id)
   end
