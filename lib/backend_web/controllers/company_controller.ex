@@ -126,7 +126,7 @@ defmodule BackendWeb.CompanyController do
     response(
       200,
       "OK",
-      Schema.ref(:CompanyCoupon),
+      Schema.ref(:CompanyPoint),
       example: %{
         point: 800
       }
@@ -170,9 +170,9 @@ defmodule BackendWeb.CompanyController do
             id: 123
           })
         end,
-      CompanyCoupon:
+      CompanyPoint:
         swagger_schema do
-          title("CompanyCoupon")
+          title("CompanyPoint")
           description("sum of point")
 
           properties do

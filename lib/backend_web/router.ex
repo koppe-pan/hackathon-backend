@@ -9,6 +9,10 @@ defmodule BackendWeb.Router do
     plug(Backend.Guardian.AuthPipeline)
   end
 
+  pipeline :api_check_company do
+    plug(Backend.CheckCompanyPipeline)
+  end
+
   scope "/api/swagger" do
     forward("/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :backend, swagger_file: "swagger.json")
   end
@@ -21,15 +25,20 @@ defmodule BackendWeb.Router do
 
   scope "/api", BackendWeb do
     pipe_through([:api, :api_auth])
+    resources("/companies", CompanyController, only: [:index])
+  end
 
-    resources "/companies", CompanyController, only: [:index, :delete] do
+  scope "/api", BackendWeb do
+    pipe_through([:api, :api_auth, :api_check_company])
+
+    resources "/companies", CompanyController, only: [:delete] do
       resources("/users", UserController, except: [:new, :create, :edit])
     end
 
     get("/me", UserController, :me)
     get("/companies/:id/point", CompanyController, :show_point)
 
-    #get("/coupons/send", CouponController, :send)
+    # get("/coupons/send", CouponController, :send)
     get("/companies/:company_id/coupons", CouponController, :show_by_company)
     get("/companies/:company_id/coupons/current", CouponController, :show_current)
     get("/companies/:company_id/coupons/next", CouponController, :show_next)
