@@ -49,7 +49,7 @@ defmodule BackendWeb.SessionController do
 
         conn
         |> put_resp_cookie("token", jwt)
-        |> redirect(external: "http://localhost:3000/dashboard")
+        |> redirect(external: Application.get_env(:backend, :redirect_dash_board))
         |> halt()
 
       {:error, reason} ->
