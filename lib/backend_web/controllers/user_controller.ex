@@ -191,11 +191,30 @@ defmodule BackendWeb.UserController do
             role: "some role"
           })
         end,
+      UserReq:
+        swagger_schema do
+          title("User")
+          description("A user of the app")
+
+          properties do
+            id(:integer, "User ID")
+            name(:string, "User name")
+            point(:string, "User point")
+            role(:string, "User role")
+          end
+
+          example(%{
+            id: 123,
+            name: "some name",
+            point: 42,
+            role: "some role"
+          })
+        end,
       UserRequest:
         swagger_schema do
           title("UserRequest")
           description("POST body for creating a user")
-          property(:user, Schema.ref(:User), "The user details")
+          property(:user, Schema.ref(:UserReq), "The user details")
 
           example(%{
             user: %{
