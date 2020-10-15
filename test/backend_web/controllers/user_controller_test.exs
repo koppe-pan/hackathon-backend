@@ -1,5 +1,6 @@
 defmodule BackendWeb.UserControllerTest do
   use BackendWeb.ConnCase
+  use PhoenixSwagger.SchemaTest, "priv/static/swagger.json"
 
   alias Backend.Users
   alias Backend.Users.User

@@ -38,6 +38,24 @@ defmodule BackendWeb.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(Backend.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    {conn, user} =
+      if tags[:authenticated] do
+        {:ok, company} =
+          Backend.Companies.create_company!(%{slack_company_id: "1", token: "token"})
+
+        {:ok, user} =
+          Backend.Users.create_user!(company.id, %{name: "hoge", slack_user_id: "hoge"})
+
+        conn =
+          conn
+          |> Guardian.Plug.sign_in(user, :token)
+          |> Guardian.Plug.VerifySession.call(%{})
+
+        {conn, user}
+      else
+        {Phoenix.ConnTest.build_conn(), nil}
+      end
+
+    {:ok, conn: conn, user: user}
   end
 end

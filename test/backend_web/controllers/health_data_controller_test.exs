@@ -1,5 +1,6 @@
 defmodule BackendWeb.HealthDataControllerTest do
   use BackendWeb.ConnCase
+  use PhoenixSwagger.SchemaTest, "priv/static/swagger.json"
 
   alias Backend.HealthDatas
   alias Backend.HealthDatas.HealthData

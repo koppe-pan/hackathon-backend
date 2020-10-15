@@ -83,7 +83,7 @@ defmodule BackendWeb.UserController do
 
   def me(conn, _attrs) do
     user = %User{} = Guardian.Plug.current_resource(conn)
-    render(conn, "me.json", user: user)
+    render(conn, "show.json", user: user)
   end
 
   swagger_path :show do

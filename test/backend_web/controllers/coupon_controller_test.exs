@@ -1,5 +1,6 @@
 defmodule BackendWeb.CouponControllerTest do
   use BackendWeb.ConnCase
+  use PhoenixSwagger.SchemaTest, "priv/static/swagger.json"
 
   alias Backend.Coupons
   alias Backend.Coupons.Coupon

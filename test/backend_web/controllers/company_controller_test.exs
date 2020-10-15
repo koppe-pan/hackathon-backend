@@ -1,15 +1,12 @@
 defmodule BackendWeb.CompanyControllerTest do
   use BackendWeb.ConnCase
+  use PhoenixSwagger.SchemaTest, "priv/static/swagger.json"
 
   alias Backend.Companies
   alias Backend.Companies.Company
 
-  @create_attrs %{
-
-  }
-  @update_attrs %{
-
-  }
+  @create_attrs %{}
+  @update_attrs %{}
   @invalid_attrs %{}
 
   def fixture(:company) do
@@ -36,15 +33,15 @@ defmodule BackendWeb.CompanyControllerTest do
       conn = get(conn, Routes.company_path(conn, :show, id))
 
       assert %{
-        "id" => id
-} = json_response(conn, 200)["data"]
-  end
+               "id" => id
+             } = json_response(conn, 200)["data"]
+    end
 
-test "renders errors when data is invalid", %{conn: conn} do
-    conn = post(conn, Routes.company_path(conn, :create), company: @invalid_attrs)
-    assert json_response(conn, 422)["errors"] != %{}
+    test "renders errors when data is invalid", %{conn: conn} do
+      conn = post(conn, Routes.company_path(conn, :create), company: @invalid_attrs)
+      assert json_response(conn, 422)["errors"] != %{}
+    end
   end
-end
 
   describe "update company" do
     setup [:create_company]
@@ -56,8 +53,8 @@ end
       conn = get(conn, Routes.company_path(conn, :show, id))
 
       assert %{
-        "id" => id
-      } = json_response(conn, 200)["data"]
+               "id" => id
+             } = json_response(conn, 200)["data"]
     end
 
     test "renders errors when data is invalid", %{conn: conn, company: company} do
@@ -73,14 +70,14 @@ end
       conn = delete(conn, Routes.company_path(conn, :delete, company))
       assert response(conn, 204)
 
-      assert_error_sent 404, fn ->
-                get(conn, Routes.company_path(conn, :show, company))
+      assert_error_sent(404, fn ->
+        get(conn, Routes.company_path(conn, :show, company))
+      end)
     end
   end
-end
 
-defp create_company(_) do
-  company = fixture(:company)
+  defp create_company(_) do
+    company = fixture(:company)
     {:ok, company: company}
   end
 end
