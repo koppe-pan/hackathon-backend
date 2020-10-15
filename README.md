@@ -10,7 +10,7 @@
 
 ```sh
 git tag v0.7 # versioning what you like
-git push
+git push --tags
 ```
 
 # Backend
