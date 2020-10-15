@@ -11,9 +11,6 @@ defmodule BackendWeb.UserView do
   end
 
   def render("user.json", %{user: user}) do
-    user
-    |> Backend.Repo.preload(:company)
-
     %{
       company_id: user.company_id,
       id: user.id,

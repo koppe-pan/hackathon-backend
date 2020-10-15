@@ -62,13 +62,27 @@ defmodule Backend.HealthDatas do
 
   """
   def create_health_data!(user_id, %{"step" => step} = attrs \\ %{}) do
-    user = %Backend.Users.User{} = Users.get_user!(user_id)
+    {:ok, user = %Backend.Users.User{}} =
+      user_id
+      |> Users.get_user!()
+      |> Users.add_point(String.to_integer(step))
 
     user
-    |> Users.add_point(String.to_integer(step))
     |> Ecto.build_assoc(:health_datas)
     |> HealthData.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_or_update_health_data!(user_id, %{"date" => date} = attrs \\ %{}) do
+    case Repo.get_by(HealthData, user_id: user_id, date: date) do
+      health_data = %HealthData{} ->
+        IO.puts("update")
+        update_health_data(health_data, attrs)
+
+      nil ->
+        IO.puts("create")
+        create_health_data!(user_id, attrs)
+    end
   end
 
   @doc """
@@ -83,7 +97,12 @@ defmodule Backend.HealthDatas do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_health_data(%HealthData{} = health_data, attrs) do
+  def update_health_data(%HealthData{} = health_data, %{"step" => step} = attrs) do
+    health_data
+    |> Repo.preload(:user)
+    |> Map.get(:user)
+    |> Users.add_point(String.to_integer(step) - health_data.step)
+
     health_data
     |> HealthData.changeset(attrs)
     |> Repo.update()

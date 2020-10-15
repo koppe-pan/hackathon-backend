@@ -85,7 +85,7 @@ defmodule BackendWeb.HealthDataController do
 
   def create(conn, %{"user_id" => user_id, "health_data" => health_data_params}) do
     with {:ok, %HealthData{} = health_data} <-
-           HealthDatas.create_health_data!(user_id, health_data_params) do
+           HealthDatas.create_or_update_health_data!(user_id, health_data_params) do
       conn
       |> put_status(:created)
       |> put_resp_header(
