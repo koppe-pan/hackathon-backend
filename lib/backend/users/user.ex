@@ -16,7 +16,7 @@ defmodule Backend.Users.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :slack_user_id, :role])
+    |> cast(attrs, [:name, :slack_user_id, :point, :role])
     |> validate_required([:name, :slack_user_id])
   end
 end
