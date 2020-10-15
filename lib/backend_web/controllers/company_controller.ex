@@ -172,12 +172,16 @@ defmodule BackendWeb.CompanyController do
         end,
       CompanyCoupon:
         swagger_schema do
-          title("Coupon")
+          title("CompanyCoupon")
           description("sum of point")
 
           properties do
             point(:integer, "sum of point")
           end
+
+          example(%{
+            point: 800
+          })
         end,
       CompanyRequest:
         swagger_schema do
