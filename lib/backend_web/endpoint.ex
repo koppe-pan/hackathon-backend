@@ -52,6 +52,6 @@ defmodule BackendWeb.Endpoint do
   plug(Plug.MethodOverride)
   plug(Plug.Head)
   plug(Plug.Session, @session_options)
-  plug(CORSPlug, origin: ["http://localhost:3000"])
+  plug(CORSPlug, origin: [Application.get_env(:backend, :redirect_host)])
   plug(BackendWeb.Router)
 end

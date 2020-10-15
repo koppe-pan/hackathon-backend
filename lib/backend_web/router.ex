@@ -29,7 +29,7 @@ defmodule BackendWeb.Router do
     get("/me", UserController, :me)
     get("/companies/:id/point", CompanyController, :show_point)
 
-    get("/coupons/send", CouponController, :send)
+    #get("/coupons/send", CouponController, :send)
     get("/companies/:company_id/coupons", CouponController, :show_by_company)
     get("/companies/:company_id/coupons/current", CouponController, :show_current)
     get("/companies/:company_id/coupons/next", CouponController, :show_next)

@@ -1,5 +1,5 @@
 # Config Variables
-  redirect_dash_board in config/config.exs
+  redirect_host in config/config.exs
 # Run on Docker
 
 ### 1. `docker-compose build`

@@ -40,8 +40,8 @@ config :backend, Backend.Guardian,
 config :backend, :slack_id, "1448262897408.1424620831986"
 config :backend, :slack_secret, "4ef7533aee33e5c9d13eab1fa91c974d"
 
-# Configure redirect dash_board
-config :backend, :redirect_dash_board, "http://localhost:3000/dashboard"
+# Configure redirect host
+config :backend, :redirect_host, "http://localhost:3000"
 
 # Configures Elixir's Logger
 config :logger, :console,
