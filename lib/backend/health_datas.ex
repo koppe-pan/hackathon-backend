@@ -61,8 +61,11 @@ defmodule Backend.HealthDatas do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_health_data!(user_id, attrs \\ %{}) do
-    Users.get_user!(user_id)
+  def create_health_data!(user_id, %{"step" => step} = attrs \\ %{}) do
+    user = %Backend.Users.User{} = Users.get_user!(user_id)
+
+    user
+    |> Users.add_point(String.to_integer(step))
     |> Ecto.build_assoc(:health_datas)
     |> HealthData.changeset(attrs)
     |> Repo.insert()

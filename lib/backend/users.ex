@@ -102,6 +102,12 @@ defmodule Backend.Users do
     |> Repo.update()
   end
 
+  def add_point(%User{} = user, step) do
+    user
+    |> User.changeset(%{point: user.point + step})
+    |> Repo.update()
+  end
+
   @doc """
   Deletes a user.
 
