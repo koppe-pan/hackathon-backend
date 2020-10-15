@@ -15,6 +15,7 @@ WORKDIR /app
 
 # Compile the project
 RUN  mix deps.get && mix compile
+EXPOSE 4000
 COPY . /app/
 
 
