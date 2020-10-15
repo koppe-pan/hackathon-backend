@@ -49,7 +49,6 @@ defmodule BackendWeb.SessionController do
 
         conn
         |> put_resp_cookie("token", jwt)
-        |> put_status(200)
         |> redirect(external: "http://localhost:3000/dashboard")
         |> halt()
 
