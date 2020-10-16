@@ -14,13 +14,7 @@ defmodule BackendWeb.CompanyController do
     tag("Companys")
     produces("application/json")
 
-    response(200, "OK", Schema.array(:Company),
-      example: [
-        %{
-          id: 1
-        }
-      ]
-    )
+    response(200, "OK", Schema.array(:Company))
   end
 
   def index(conn, _params) do
@@ -126,10 +120,7 @@ defmodule BackendWeb.CompanyController do
     response(
       200,
       "OK",
-      Schema.ref(:CompanyPoint),
-      example: %{
-        point: 800
-      }
+      Schema.ref(:CompanyPoint)
     )
   end
 

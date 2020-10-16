@@ -15,11 +15,7 @@ defmodule BackendWeb.UserController do
     produces("application/json")
     parameter(:company_id, :path, :integer, "Company ID", required: true, example: 3)
 
-    response(200, "OK", Schema.array(:User),
-      example: [
-        %{id: 1, name: "some name", point: 42, role: "some role"}
-      ]
-    )
+    response(200, "OK", Schema.array(:User))
   end
 
   def index(conn, %{"company_id" => company_id}) do
@@ -70,15 +66,7 @@ defmodule BackendWeb.UserController do
     tag("Users")
     produces("application/json")
 
-    response(200, "OK", Schema.ref(:User),
-      example: %{
-        company_id: 1,
-        id: 123,
-        name: "some name",
-        point: 42,
-        role: "some role"
-      }
-    )
+    response(200, "OK", Schema.ref(:User))
   end
 
   def me(conn, _attrs) do
@@ -94,14 +82,7 @@ defmodule BackendWeb.UserController do
     parameter(:company_id, :path, :integer, "Company ID", required: true, example: 3)
     parameter(:id, :path, :integer, "User ID", required: true, example: 123)
 
-    response(200, "OK", Schema.ref(:User),
-      example: %{
-        id: 123,
-        name: "some name",
-        point: 42,
-        role: "some role"
-      }
-    )
+    response(200, "OK", Schema.ref(:User))
   end
 
   def show(conn, %{"id" => id}) do
@@ -121,21 +102,10 @@ defmodule BackendWeb.UserController do
       company_id(:path, :integer, "Company ID", required: true, example: 3)
       id(:path, :integer, "User ID", required: true, example: 3)
 
-      user(:body, Schema.ref(:UserRequest), "The user details",
-        example: %{
-          user: %{name: "some name", point: 42, role: "some role"}
-        }
-      )
+      user(:body, Schema.ref(:UserRequest), "The user details")
     end
 
-    response(200, "Updated Successfully", Schema.ref(:User),
-      example: %{
-        id: 3,
-        name: "some name",
-        point: 42,
-        role: "some role"
-      }
-    )
+    response(200, "Updated Successfully", Schema.ref(:User))
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do

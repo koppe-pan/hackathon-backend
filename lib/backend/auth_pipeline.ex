@@ -6,10 +6,10 @@ defmodule Backend.Guardian.AuthPipeline do
     module: Backend.Guardian,
     error_handler: Backend.Guardian.AuthErrorHandler
 
-  plug Guardian.Plug.VerifySession, claims: @claims
-  plug Guardian.Plug.VerifyHeader, claims: @claims, realm: "Bearer"
-  plug Guardian.Plug.EnsureAuthenticated
-  plug Guardian.Plug.LoadResource, ensure: true
+  plug(Guardian.Plug.VerifySession, claims: @claims)
+  plug(Guardian.Plug.VerifyHeader, claims: @claims, realm: "Bearer")
+  plug(Guardian.Plug.EnsureAuthenticated)
+  plug(Guardian.Plug.LoadResource, ensure: true)
 end
 
 defmodule Backend.Guardian.AuthErrorHandler do

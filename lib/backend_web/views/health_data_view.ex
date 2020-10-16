@@ -11,9 +11,13 @@ defmodule BackendWeb.HealthDataView do
   end
 
   def render("health_data.json", %{health_data: health_data}) do
-    %{id: health_data.id,
+    %{
+      id: health_data.id,
       date: health_data.date,
       step: health_data.step,
-      comment: health_data.comment}
+      sleep_begin: health_data.sleep_begin,
+      sleep_end: health_data.sleep_end,
+      comment: health_data.comment
+    }
   end
 end

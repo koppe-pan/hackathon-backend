@@ -47,6 +47,7 @@ defmodule Backend.MixProject do
       {:ex_json_schema, "~> 0.5"},
       {:guardian, "~> 2.0"},
       {:cors_plug, "~> 2.0"},
+      {:tzdata, "~> 1.0.4"},
       {:httpoison, "~> 1.6"}
     ]
   end

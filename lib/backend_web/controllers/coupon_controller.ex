@@ -14,17 +14,7 @@ defmodule BackendWeb.CouponController do
     tag("Coupons")
     produces("application/json")
 
-    response(200, "OK", Schema.array(:Coupon),
-      example: [
-        %{
-          id: 1,
-          cost: 42,
-          description: "some description",
-          created_at: "2010-04-17 14:00:00",
-          life_time: "2010-04-17 14:00:00"
-        }
-      ]
-    )
+    response(200, "OK", Schema.array(:Coupon))
   end
 
   def index(conn, _params) do
@@ -40,21 +30,9 @@ defmodule BackendWeb.CouponController do
     consumes("application/json")
     produces("application/json")
 
-    parameter(:coupon, :body, Schema.ref(:CouponRequest), "The coupon details",
-      example: %{
-        coupon: %{cost: 42, description: "some description", life_time: "2010-04-17 14:00:00"}
-      }
-    )
+    parameter(:coupon, :body, Schema.ref(:CouponRequest), "The coupon details")
 
-    response(201, "Coupon created OK", Schema.ref(:Coupon),
-      example: %{
-        id: 1,
-        cost: 42,
-        description: "some description",
-        created_at: "2010-04-17 14:00:00",
-        life_time: "2010-04-17 14:00:00"
-      }
-    )
+    response(201, "Coupon created OK", Schema.ref(:Coupon))
   end
 
   def create(conn, %{"coupon" => coupon_params}) do
@@ -73,15 +51,7 @@ defmodule BackendWeb.CouponController do
     produces("application/json")
     parameter(:company_id, :path, :integer, "Company ID", required: true, example: 123)
 
-    response(200, "OK", Schema.ref(:Coupon),
-      example: %{
-        id: 123,
-        cost: 42,
-        description: "some description",
-        created_at: "2010-04-17 14:00:00",
-        life_time: "2010-04-17 14:00:00"
-      }
-    )
+    response(200, "OK", Schema.ref(:Coupon))
   end
 
   def show_by_company(conn, %{"company_id" => company_id}) do
@@ -96,15 +66,7 @@ defmodule BackendWeb.CouponController do
     produces("application/json")
     parameter(:company_id, :path, :integer, "Company ID", required: true, example: 123)
 
-    response(200, "OK", Schema.ref(:Coupon),
-      example: %{
-        id: 123,
-        cost: 42,
-        description: "some description",
-        created_at: "2010-04-17 14:00:00",
-        life_time: "2010-04-17 14:00:00"
-      }
-    )
+    response(200, "OK", Schema.ref(:Coupon))
   end
 
   def show_current(conn, %{"company_id" => company_id}) do
@@ -119,15 +81,7 @@ defmodule BackendWeb.CouponController do
     produces("application/json")
     parameter(:company_id, :path, :integer, "Company ID", required: true, example: 123)
 
-    response(200, "OK", Schema.ref(:Coupon),
-      example: %{
-        id: 123,
-        cost: 42,
-        description: "some description",
-        created_at: "2010-04-17 14:00:00",
-        life_time: "2010-04-17 14:00:00"
-      }
-    )
+    response(200, "OK", Schema.ref(:Coupon))
   end
 
   def show_next(conn, %{"company_id" => company_id}) do
@@ -142,15 +96,7 @@ defmodule BackendWeb.CouponController do
     produces("application/json")
     parameter(:id, :path, :integer, "Coupon ID", required: true, example: 123)
 
-    response(200, "OK", Schema.ref(:Coupon),
-      example: %{
-        id: 123,
-        cost: 42,
-        description: "some description",
-        created_at: "2010-04-17 14:00:00",
-        life_time: "2010-04-17 14:00:00"
-      }
-    )
+    response(200, "OK", Schema.ref(:Coupon))
   end
 
   def show(conn, %{"id" => id}) do
@@ -169,22 +115,10 @@ defmodule BackendWeb.CouponController do
     parameters do
       id(:path, :integer, "Coupon ID", required: true, example: 3)
 
-      coupon(:body, Schema.ref(:CouponRequest), "The coupon details",
-        example: %{
-          coupon: %{cost: 42, description: "some description", life_time: "2010-04-17 14:00:00"}
-        }
-      )
+      coupon(:body, Schema.ref(:CouponRequest), "The coupon details")
     end
 
-    response(200, "Updated Successfully", Schema.ref(:Coupon),
-      example: %{
-        id: 3,
-        cost: 42,
-        description: "some description",
-        created_at: "2010-04-17 14:00:00",
-        life_time: "2010-04-17 14:00:00"
-      }
-    )
+    response(200, "Updated Successfully", Schema.ref(:Coupon))
   end
 
   def update(conn, %{"id" => id, "coupon" => coupon_params}) do

@@ -61,11 +61,17 @@ defmodule Backend.HealthDatas do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_health_data!(user_id, %{"step" => step} = attrs \\ %{}) do
+  def create_health_data!(
+        user_id,
+        %{"step" => step, "sleep_begin" => beg, "sleep_end" => en} = attrs \\ %{}
+      ) do
     {:ok, user = %Backend.Users.User{}} =
       user_id
       |> Users.get_user!()
       |> Users.add_point(String.to_integer(step))
+      |> Users.add_point(
+        rem(Time.from_iso8601(en) - Time.from_iso8601(beg) + 24 * 60 * 60, 24 * 60 * 60)
+      )
 
     user
     |> Ecto.build_assoc(:health_datas)

@@ -12,7 +12,7 @@ config :backend,
 
 # Configures the endpoint
 config :backend, BackendWeb.Endpoint,
-  url: [host: "https://dqrbvqkowxc7y.cloudfront.net/"],
+  url: [host: "localhost"],
   secret_key_base: "Xti3kov4H4ePDWvzFsX7BYT5/xDK+Tadx5MwlOvd1Yev/rPB2WKpO/TwTtJX7aAF",
   render_errors: [view: BackendWeb.ErrorView, accepts: ~w(json), layout: false],
   pubsub_server: Backend.PubSub,
@@ -41,13 +41,15 @@ config :backend, :slack_id, "1448262897408.1424620831986"
 config :backend, :slack_secret, "4ef7533aee33e5c9d13eab1fa91c974d"
 
 # Configure redirect host
-config :backend, :redirect_host, "https://dqrbvqkowxc7y.cloudfront.net"
+config :backend, :redirect_host, "http://localhost:3000"
 
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+# Time Zone Database
+config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 

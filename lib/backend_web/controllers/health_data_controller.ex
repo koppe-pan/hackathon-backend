@@ -15,16 +15,7 @@ defmodule BackendWeb.HealthDataController do
     produces("application/json")
     parameter(:user_id, :path, :integer, "User ID", required: true, example: 3)
 
-    response(200, "OK", Schema.array(:HealthData),
-      example: [
-        %{
-          id: 1,
-          comment: "some comment",
-          date: ~D[2010-04-17],
-          step: 42
-        }
-      ]
-    )
+    response(200, "OK", Schema.array(:HealthData))
   end
 
   def index(conn, %{"user_id" => user_id}) do
@@ -40,16 +31,7 @@ defmodule BackendWeb.HealthDataController do
     produces("application/json")
     parameter(:company_id, :path, :integer, "User ID", required: true, example: 3)
 
-    response(200, "OK", Schema.array(:HealthData),
-      example: [
-        %{
-          id: 1,
-          comment: "some comment",
-          date: ~D[2010-04-17],
-          step: 42
-        }
-      ]
-    )
+    response(200, "OK", Schema.array(:HealthData))
   end
 
   def index_by_company(conn, %{"company_id" => company_id}) do
@@ -67,25 +49,14 @@ defmodule BackendWeb.HealthDataController do
 
     parameter(:user_id, :path, :integer, "User ID", required: true, example: 3)
 
-    parameter(:health_data, :body, Schema.ref(:HealthDataRequest), "The health_data details",
-      example: %{
-        health_data: %{comment: "some comment", date: ~D[2010-04-17], step: 42}
-      }
-    )
+    parameter(:health_data, :body, Schema.ref(:HealthDataRequest), "The health_data details")
 
-    response(201, "HealthData created OK", Schema.ref(:HealthData),
-      example: %{
-        id: 1,
-        comment: "some comment",
-        date: ~D[2010-04-17],
-        step: 42
-      }
-    )
+    response(201, "HealthData created OK", Schema.ref(:HealthData))
   end
 
   def create(conn, %{"user_id" => user_id, "health_data" => health_data_params}) do
     with {:ok, %HealthData{} = health_data} <-
-           HealthDatas.create_or_update_health_data!(user_id, health_data_params) do
+           HealthDatas.create_health_data!(user_id, health_data_params) do
       conn
       |> put_status(:created)
       |> put_resp_header(
@@ -104,14 +75,7 @@ defmodule BackendWeb.HealthDataController do
     parameter(:user_id, :path, :integer, "User ID", required: true, example: 3)
     parameter(:id, :path, :integer, "HealthData ID", required: true, example: 123)
 
-    response(200, "OK", Schema.ref(:HealthData),
-      example: %{
-        id: 123,
-        comment: "some comment",
-        date: ~D[2010-04-17],
-        step: 42
-      }
-    )
+    response(200, "OK", Schema.ref(:HealthData))
   end
 
   def show(conn, %{"id" => id}) do
@@ -132,21 +96,10 @@ defmodule BackendWeb.HealthDataController do
     parameters do
       id(:path, :integer, "HealthData ID", required: true, example: 3)
 
-      health_data(:body, Schema.ref(:HealthDataRequest), "The health_data details",
-        example: %{
-          health_data: %{comment: "some comment", date: ~D[2010-04-17], step: 42}
-        }
-      )
+      health_data(:body, Schema.ref(:HealthDataRequest), "The health_data details")
     end
 
-    response(200, "Updated Successfully", Schema.ref(:HealthData),
-      example: %{
-        id: 3,
-        comment: "some comment",
-        date: ~D[2010-04-17],
-        step: 42
-      }
-    )
+    response(200, "Updated Successfully", Schema.ref(:HealthData))
   end
 
   def update(conn, %{"id" => id, "health_data" => health_data_params}) do
@@ -188,13 +141,16 @@ defmodule BackendWeb.HealthDataController do
             comment(:string, "HealthData comment")
             date(:string, "HealthData date")
             step(:string, "HealthData step")
+            sleep_time(:time, "HealthData sleep time")
           end
 
           example(%{
             id: 123,
             comment: "some comment",
-            date: ~D[2010-04-17],
-            step: 42
+            date: "2010-04-17",
+            step: 42,
+            sleep_begin: "01:00:00",
+            sleep_end: "01:00:00"
           })
         end,
       HealthDataRequest:
@@ -206,7 +162,7 @@ defmodule BackendWeb.HealthDataController do
           example(%{
             health_data: %{
               comment: "some comment",
-              date: ~D[2010-04-17],
+              date: "2010-04-17",
               step: 42
             }
           })

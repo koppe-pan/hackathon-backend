@@ -6,7 +6,10 @@ defmodule Backend.Scheduler do
   end
 
   def init(state) do
-    Process.send_after(self(), :work, calc_sunday())
+    {:ok, now} = DateTime.now("Asia/Tokyo")
+    c = calc_sunday(now)
+    IO.puts(c)
+    Process.send_after(self(), :work, c)
     {:ok, state}
   end
 
@@ -17,16 +20,31 @@ defmodule Backend.Scheduler do
     {:noreply, state}
   end
 
-  defp calc_sunday() do
+  defp calc_sunday(now) do
     dif =
-      Date.utc_today()
+      now
+      |> DateTime.to_date()
       |> Date.day_of_week()
 
-    with {:ok, sunday} <-
-           Date.utc_today()
-           |> Date.add(7 - dif)
-           |> NaiveDateTime.new(~T[00:00:00]) do
-      NaiveDateTime.diff(sunday, NaiveDateTime.utc_now())
+    with sunday = %Date{} <-
+           now
+           |> DateTime.to_date()
+           |> Date.add(7 - dif) do
+      DateTime.diff(
+        %DateTime{
+          year: sunday.year,
+          month: sunday.month,
+          day: sunday.day,
+          hour: 0,
+          minute: 0,
+          second: 0,
+          time_zone: "Asia/Tokyo",
+          utc_offset: now.utc_offset,
+          std_offset: now.std_offset,
+          zone_abbr: "JST"
+        },
+        now
+      ) * 1000
     end
   end
 

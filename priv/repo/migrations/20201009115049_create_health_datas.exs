@@ -6,6 +6,8 @@ defmodule Backend.Repo.Migrations.CreateHealthDatas do
       add(:date, :date)
       add(:step, :integer)
       add(:comment, :text)
+      add(:sleep_begin, :time)
+      add(:sleep_end, :time)
       add(:user_id, references(:users, on_delete: :delete_all))
 
       timestamps()
